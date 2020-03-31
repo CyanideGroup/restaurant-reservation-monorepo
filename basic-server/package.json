@@ -4,9 +4,12 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "build": "echo build",
+    "build": "tsc --outDir dist",
     "test": "echo test",
     "lint": "echo lint",
     "clean": "echo clean"
+  },
+  "devDependencies": {
+    "typescript": "^3.8.3"
   }
 }
