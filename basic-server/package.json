@@ -1,0 +1,12 @@
+{
+  "name": "basic-server",
+  "version": "0.0.1",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "build": "echo build",
+    "test": "echo test",
+    "lint": "echo lint",
+    "clean": "echo clean"
+  }
+}
