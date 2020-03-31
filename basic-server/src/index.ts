@@ -1,0 +1,1 @@
+const start = () => {console.log('start')}
