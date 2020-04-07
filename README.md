@@ -1,3 +1,10 @@
 ## RSO Project
-### To run:
-TBA
+### Before build:
+```sh
+yarn install
+```
+
+### To buil:
+```sh
+yarn build
+```
