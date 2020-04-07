@@ -52,7 +52,6 @@ module.exports = {
     }),
     new HtmlWebpackPlugin({
       template: 'src/index.html',
-      // favicon: './src/ui/assets/logo.ico',
     }),
   ],
   devServer: {
