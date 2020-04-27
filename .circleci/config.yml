@@ -11,7 +11,7 @@ jobs:
           steps:
             - run: 
                 working_directory: ~/basic-app
-                yarn install
+                command: yarn install
             - run: cd basic-app && yarn build
             - run: cd basic-app && yarn test
 workflows:
