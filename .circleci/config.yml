@@ -10,7 +10,8 @@ jobs:
       - node/with-cache:
           steps:
             - run: 
-            - run: cd basic-app && yarn install
+                working_directory: ~/basic-app
+                yarn install
             - run: cd basic-app && yarn build
             - run: cd basic-app && yarn test
 workflows:
