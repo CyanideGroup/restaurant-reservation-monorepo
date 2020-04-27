@@ -9,9 +9,15 @@ jobs:
       - checkout
       - node/with-cache:
           steps:
-            - run: yarn install
-            - run: yarn build
-            - run: yarn test
+            - run: 
+                working_directory: ~/project/basic-app
+                command: yarn install
+            - run:
+                working_directory: ~/project/basic-app
+                command: yarn build
+            - run:
+                working_directory: ~/project/basic-app
+                command: yarn test
 workflows:
     build-and-test:
       jobs:
