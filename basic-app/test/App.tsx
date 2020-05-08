@@ -8,8 +8,8 @@ import App from '../src/App';
 Enzyme.configure({ adapter: new Adapter() });
 
 describe('App', () => {
-  it('shows Hello React', () => {
+  it('shows Choose number of guests', () => {
     const appWrapper = mount(<App/>);
-    expect(appWrapper.text().includes('Hello React!')).to.be.true;
+    expect(appWrapper.text().includes('Choose number of guests')).to.be.true;
   })
 });

@@ -3,7 +3,7 @@ export const COMMON_HEADERS = {
   'Content-Type': 'application/json',
 };
 
-const fetch = window.fetch.bind(window);
+const fetch = window.fetch ? window.fetch.bind(window) : () => {};
 
 type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE';
 
