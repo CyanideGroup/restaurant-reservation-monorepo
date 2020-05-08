@@ -3,7 +3,7 @@ import {ReservationPage} from './ReservationPage';
 import { ApiGatewayService } from './services/ApiGatewayService';
 
 const App = () => {
-  const [apiGatewayService] = useState(new ApiGatewayService('https://e4fa99cd-b170-445e-a214-791fb890585c.mock.pstmn.io'));
+  const [apiGatewayService] = useState(new ApiGatewayService('http://localhost:3030'));
   return (
   <div>
     <ReservationPage apiGatewayService={apiGatewayService}/>
