@@ -1,0 +1,78 @@
+body {
+  height: 100vh;
+  padding: 0px;
+  margin: 0px;
+}
+
+.body {
+  padding: 0px;
+}
+
+.bigBox {
+  background: url("../img/bg1.jpg") fixed center center;
+  background-color: blue;
+  background-size: cover;
+  text-align: center;
+  height: 100%;
+  overflow: hidden;
+  padding: 0px;
+}
+
+.box {
+  width: 400px;
+  background: white;
+  display: inline-grid;
+  margin-top: 50px;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.hours {
+  width: 350px;
+  margin: 5px auto;
+}
+
+.react-calendar {
+  width: unset;
+}
+
+.guests {
+  float: left;
+  height: 80px;
+  width: 300px;
+  padding: 5px 0px;
+  margin: auto;
+}
+
+.date {
+  float: left;
+  width: 100%;
+}
+
+.reservation {
+  float: left;
+  width: 100%;
+}
+
+.part1Inside .Select {
+  padding: 20px 0px 0px 60px;
+}
+
+.hours__list {
+  padding-left: 0px;
+}
+
+.one-hour__list-element {
+  float: left;
+  padding: 0px 5px;
+}
+
+.one-hour__button {
+  width: 60px;
+  height: 40px;
+  border-radius: 20%;
+}
+
+li {
+  list-style-type: none;
+}
