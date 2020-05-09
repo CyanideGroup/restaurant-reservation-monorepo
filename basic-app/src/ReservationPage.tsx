@@ -44,6 +44,13 @@ export const ReservationPage = ({apiGatewayService}: {apiGatewayService: ApiGate
       ['19:00']: false, 
       ['19:30']: true, 
       ['20:00']: false,
+    },
+    ['2020-05-09']: {
+      ['18:00']: true,
+      ['18:30']: true,
+      ['19:00']: true,
+      ['19:30']: false,
+      ['20:00']: true,
     }
   }
 
@@ -64,13 +71,20 @@ export const ReservationPage = ({apiGatewayService}: {apiGatewayService: ApiGate
       onChange={setDate}
     />
     <ul>
-      {Object.keys(hours[formatDate(date)]).map((hour) => 
+      {hours[formatDate(date)] ? 
+        Object.keys(hours[formatDate(date)]).map((hour) => 
+        hour ?
         <li key={hour}>
-          <button disabled={hours[formatDate(date)][hour]} onClick={() => setHour(hour.toString())}>
+          <button disabled={hours[formatDate(date)] ? hours[formatDate(date)][hour] : false} onClick={() => setHour(hour.toString())}>
             {hour}
           </button>
         </li>
-      )}
+        : 
+        <div>
+          Nie ma wolnych terminow
+        </div>
+      ) :
+      <div>Nie ma wolnych terminow</div>}
     </ul>
 
     Reservation for {formatDate(date)} {hour}
