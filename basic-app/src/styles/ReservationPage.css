@@ -1,0 +1,65 @@
+.body {
+  /* background: url("../img/bg1.jpg") fixed center center; */
+  background-color: blue;
+  background-size: cover;
+}
+
+.bigBox {
+  overflow: hidden;
+}
+
+.box {
+  width: 1000%;
+}
+
+.part1 {
+  float: left;
+
+  height: 500px;
+  width: 550px;
+}
+
+.part2 {
+  float: left;
+
+  height: 500px;
+  width: 440px;
+}
+
+.Reserv {
+  float: left;
+
+  height: 500px;
+  width: 400px;
+}
+
+.part1Inside {
+  padding: 200px 0px 0px 350px;
+}
+.part2Inside {
+  padding: 25px 20px 0px 35px;
+}
+
+.ReservInside {
+  padding: 200px 0px 0px 0px;
+}
+
+.part1Inside .Select {
+  padding: 20px 0px 0px 60px;
+}
+
+.ButtonReserve {
+  padding: 20px 0px 0px 75px;
+}
+
+.Hours {
+  padding: 0px 0px 0px 110px;
+}
+
+li {
+  list-style-type: none;
+}
+
+.part2Inside .text {
+  padding: 0px 0px 0px 135px;
+}
