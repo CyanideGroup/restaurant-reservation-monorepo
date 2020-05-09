@@ -1,3 +1,3 @@
 ## RSO Project
 ### To run:
-TBA
+yarn && yarn start
