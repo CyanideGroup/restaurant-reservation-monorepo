@@ -3,7 +3,7 @@ import {ReservationPage} from './ReservationPage';
 import { ApiGatewayService } from './services/ApiGatewayService';
 
 const App = () => {
-  const [apiGatewayService] = useState(new ApiGatewayService('http://localhost:3030'));
+  const [apiGatewayService] = useState(new ApiGatewayService('http://localhost:5000'));
   return (
   <div>
     <ReservationPage apiGatewayService={apiGatewayService}/>
