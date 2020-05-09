@@ -1,0 +1,5 @@
+pitstop
+__pycache__
+.idea
+venv
+.vscode
