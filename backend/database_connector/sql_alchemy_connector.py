@@ -15,15 +15,27 @@ class SQLAlchemyConnector(DBConnector):
         Session = sessionmaker(self.db)
         self.session = Session()
 
-    def select(self, table_name, filter=None, return_attr=None):
+    def select(self, table_name, filter=None, return_attr=None, as_dict=True):
         table_class = self.table_data[table_name]
         objects = self.session.query(table_class)
         if filter is not None:
             for key, value in filter.items():
-                attribute = getattr(table_class, key)
-                objects = objects.filter(attribute == value)
 
-        objects = [self.row2dict(obj) for obj in objects]
+                if key[-4:] == '_max':
+                    attribute = getattr(table_class, key[0:-4])
+                    objects = objects.filter(attribute <= value)
+                elif key[-4:] == '_min':
+                    attribute = getattr(table_class, key[0:-4])
+                    objects = objects.filter(attribute <= value)
+                else:
+                    attribute = getattr(table_class, key)
+                    if isinstance(value, list):
+                        objects = objects.filter(attribute.in_(value))
+                    else:
+                        objects = objects.filter(attribute == value)
+
+        if as_dict:
+            objects = [self.row2dict(obj) for obj in objects]
         return objects
 
     def create(self, table_name, data, commit=True):

@@ -94,7 +94,7 @@ class Service:
             if 'method' in data.keys():
 
                 method = data.pop('method')
-                self.log(topic=f'Table {table_name} updated with {method.upper()}.',
+                self.log(topic=f'Table {table_name} updated with {method.upper()}.', type='EB RCV',
                          content=f'Event data:{data}')
                 if method == 'create':
                     self.create_record(table_name, data, force=True)
@@ -146,6 +146,7 @@ class Service:
                 data['_id']=id
                 self.channel.basic_publish(exchange=table_name, routing_key='',
                                            body=str(data))
+                self.log(f'Record added to table{table_name}, publishing update event', type='EB CALL')
         else:
             created, id = self.db_con.create(table_name, data)
         return created, id

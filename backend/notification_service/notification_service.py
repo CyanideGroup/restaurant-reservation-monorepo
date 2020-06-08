@@ -14,7 +14,7 @@ EMAIL_ADDR = 'cyanide_service@wp.pl'
 PASSWORD = 'password'
 
 class NotificationService(service.Service):
-    def __init__(self, use_mock_database=True, name='notification_service'):
+    def __init__(self, name='notification_service', use_mock_database=False):
         super().__init__(name, table_names=['reservations', 'restaurants'])
         if use_mock_database:
             self.db_con = db_connector.DBConnectorMock()
@@ -42,7 +42,7 @@ class NotificationService(service.Service):
             self.db_con = sql_alchemy_connector.\
                 SQLAlchemyConnector([Restaurant, Reservation],
                                     url="localhost", db_name='postgres',
-                                    username='reservation_service', password='password')
+                                    username='notification_service', password='password')
             base.metadata.create_all(self.db_con.db)
 
     def send_email(self, address, topic, message):
