@@ -66,9 +66,9 @@ class ReservationService(service.Service):
         self.register_task(self.get_user_reservations, 'get_user_reservations')
 
     def create_reservation(self, data):
-        self.log('create reservation function called')
-        created, id = self.create_record('reservations', data)
-        return created, id
+        self.log('create reservation function called', type='RPC RECV')
+        created, data = self.create_record('reservations', data)
+        return created, data
 
     def get_user_reservations(self, user):
         return self.db_con.select('reservations', filter={'email': user})
@@ -96,7 +96,7 @@ if __name__ == '__main__':
     emails = [f'{name}@gmail.com' for name in user_names]
     rest_ids = [i%len(restaurant_names) for i in range(len(user_names))]
     reserv_ids = [i for i in range(len(user_names))]
-    reservations_data = [{'email': email, 'table_id': table_id, 'date': datetime.date.today(), 'time': 'breakfast'}
+    reservations_data = [{'email': email, 'table_id': table_id, 'date': datetime.date.today(), 'time': datetime.time(11)}
                          for reserv_id, email, table_id in zip(reserv_ids, emails, table_ids)]
 
 
@@ -113,12 +113,12 @@ if __name__ == '__main__':
     service.clear_table('tables', force=True)
     service.clear_table('restaurants', force=True)
     # Initiating tables
-    service.init_table('restaurants', restaurants_data, force=True)
-    service.init_table('tables', tables_data, force=True)
-    service.init_table('reservations', reservations_data)
+    #service.init_table('restaurants', restaurants_data, force=True)
+    #service.init_table('tables', tables_data, force=True)
+    #service.init_table('reservations', reservations_data)
 
     reservation_json = {'restaurant_id':rest_ids[0], 'email': 'new_email@gmail.com',
                         'date': datetime.date.today(), 'time': 'dinner'}
     # service.create_record('reservations', {'_id': 7, 'email': 'email@email.com', 'restaurant_id': 1,'date': datetime.date.today(), 'time': 'breakfast'})
-    service.create_reservation(reservation_json)
+    # service.create_reservation(reservation_json)
     service.run()

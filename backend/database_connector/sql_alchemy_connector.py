@@ -62,9 +62,9 @@ class SQLAlchemyConnector(DBConnector):
         self.session.add(object)
         if commit:
             self.session.commit()
-            return True, object._id
+            return True, self.row2dict(object)
 
-    def clear(self, table_name):
+    def clear(self, table_name, commit=True):
         """
         deletes all rows from table
         :param table_name:
@@ -72,6 +72,8 @@ class SQLAlchemyConnector(DBConnector):
         """
         table_class = self.table_data[table_name]
         self.session.query(table_class).delete()
+        if commit:
+            self.session.commit()
         return True
 
     def update(self, table_name, data):

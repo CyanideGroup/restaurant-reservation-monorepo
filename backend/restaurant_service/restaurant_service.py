@@ -14,16 +14,16 @@ import sqlalchemy
 import datetime
 import service
 
-class SearchService(service.Service):
-    def __init__(self, name='search_service', use_mock_database=False):
-        super().__init__(name, table_names=['reservations', 'restaurants', 'tables'])
+class RestaurantService(service.Service):
+    def __init__(self, name='restaurant_service', use_mock_database=False):
+        super().__init__(name, table_names=['reservations', 'restaurants', 'tables'], owned_tables=['restaurants', 'tables'])
         if use_mock_database:
             self.db_con = db_connector.DBConnectorMock()
         else:
             base = declarative_base()
             class Restaurant(base):
                 __tablename__ = 'restaurants'
-                __table_args__ = {'schema': 'search_microservice'}
+                __table_args__ = {'schema': 'restaurant_microservice'}
                 _id = Column(Integer, primary_key=True)
                 name = Column(String)
                 address = Column(String)
@@ -36,11 +36,11 @@ class SearchService(service.Service):
 
             class Table(base):
                 __tablename__ = 'tables'
-                __table_args__ = {'schema': 'search_microservice'}
+                __table_args__ = {'schema': 'restaurant_microservice'}
                 _id = Column(Integer, primary_key=True)
                 label = Column(String)
                 restaurant_id = Column(Integer, ForeignKey(
-                    'search_microservice.restaurants._id'))
+                    'restaurant_microservice.restaurants._id'))
                 restaurant = relationship('Restaurant')
                 smoking = Column(sqlalchemy.types.Boolean)
                 outside = Column(sqlalchemy.types.Boolean)
@@ -48,56 +48,49 @@ class SearchService(service.Service):
 
             class Reservation(base):
                 __tablename__ = 'reservations'
-                __table_args__ = {"schema": "search_microservice"}
+                __table_args__ = {"schema": "restaurant_microservice"}
                 _id = Column(Integer, primary_key=True)
                 table_id = Column(Integer, ForeignKey(
-                    'search_microservice.tables._id'))
+                    'restaurant_microservice.tables._id'))
                 table = relationship('Table')
                 date = Column(Date)
                 time = Column(sqlalchemy.types.Time)
+                guests = Column(Integer)
 
 
             self.db_con = sql_alchemy_connector.\
                 SQLAlchemyConnector([Restaurant, Reservation, Table],
                                     url="localhost", db_name='postgres',
-                                    username='search_service', password='password')
+                                    username='restaurant_service', password='password')
             base.metadata.create_all(self.db_con.db)
-        self.register_task(self.search, 'search')
+        self.register_task(self.get_restaurants, 'get_restaurants')
+        self.register_task(self.create_table, 'create_table')
+        self.register_task(self.create_restaurant, 'create_restaurant')
+        self.register_task(self.get_reservations_by_restaurant_id, 'get_reservations')
 
-    def search(self, restaurant_id, date, filter=None):
-        restaurant_info = self.db_con.select('restaurants', filter={'_id':restaurant_id})[0]
-        opens = restaurant_info['opens']
-        time_step = restaurant_info['timestep']
-        closes = restaurant_info['closes']
-        start_time = datetime.datetime.combine(date, opens)
-        end_time = datetime.datetime.combine(date, closes)
-        time = start_time
-        times = []
-        while time < end_time:
-            times.append(time)
-            time += datetime.timedelta(minutes=time_step)
-        if filter is None:
-            filter = {}
-        filter['restaurant_id'] = restaurant_id
-        tables = self.db_con.select('tables', filter=filter, as_dict=True)
-        reservations = self.db_con.select('reservations', filter={'table_id': [t['_id'] for t in tables], 'date':date}, as_dict=True)
-        data = {}
-        reservation_time = datetime.timedelta(hours=3)
-        for time in times:
-            for table in tables:
-                is_free = True
-                for reservation in reservations:
-                    if time not in data.keys():
-                        data[time] = []
-                    res_time = reservation['time']
-                    res_datetime = datetime.datetime.combine(date, res_time)
-                    if reservation['table_id'] == table['_id'] \
-                        and time - reservation_time < res_datetime < time + reservation_time:
-                        is_free = False
-                        break
-                if is_free:
-                    data[time].append(table)
+    def create_restaurant(self, data):
+        self.log('create restaurant function called', type='RPC RECV')
+        created, data = self.create_record('restaurants', data)
+        return created, data
+
+    def create_table(self, data):
+        self.log('create restaurant function called', type='RPC RECV')
+        created, data = self.create_record('tables', data)
+        return created, data
+
+    def get_restaurants(self, filter=None):
+        self.log('get restaurant function called', type='RPC RECV')
+        return self.db_con.select('restaurants', filter=filter)
+
+    def get_reservations_by_restaurant_id(self, restaurant_id):
+        reservations = self.db_con.select('reservations', filter={'restaurant_id': restaurant_id}, as_dict=False)
+        data = []
+        for reservation in reservations:
+            row = self.db_con.row2dict(reservation)
+            row['table'] = self.db_con.row2dict(reservation.table)
+            data.append(row)
         return data
+
 
 if __name__ == '__main__':
     # Generating initial restaurant table data
@@ -114,16 +107,8 @@ if __name__ == '__main__':
                     'restaurant_id': restaurant_ids[i % len(restaurant_names)],
                     'outside': i % 2, 'smoking': i % 2} for i in range(num_tables)]
 
-    # generating initial reservations darta
-    user_names = ['tomek', 'robert', 'justyna', 'anton', 'khanh', 'pawel']
-    emails = [f'{name}@gmail.com' for name in user_names]
-    rest_ids = [i % len(restaurant_names) for i in range(len(user_names))]
-    reserv_ids = [i for i in range(len(user_names))]
-    reservations_data = [{'email': email, 'table_id': table_id, 'date': datetime.date.today(), 'time': datetime.time(11)}
-                         for reserv_id, email, table_id in zip(reserv_ids, emails, table_ids)]
-
     # creating the service instance
-    service = SearchService(use_mock_database=False)
+    service = RestaurantService(use_mock_database=False)
 
     # force-cleaning
     service.clear_table('reservations', force=True)
@@ -131,9 +116,8 @@ if __name__ == '__main__':
     service.clear_table('restaurants', force=True)
 
     # Initiating tables
-    #service.init_table('restaurants', restaurants_data, force=True)
-    #service.init_table('tables', tables_data, force=True)
-    #service.init_table('reservations', reservations_data, force=True)
+    # service.init_table('restaurants', restaurants_data)
+    # service.init_table('tables', tables_data)
+    # service.init_table('reservations', reservations_data, force=True)
 
-    service.search(rest_ids[0], datetime.date.today())
     service.run()

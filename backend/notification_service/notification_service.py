@@ -44,6 +44,7 @@ class NotificationService(service.Service):
                                     url="localhost", db_name='postgres',
                                     username='notification_service', password='password')
             base.metadata.create_all(self.db_con.db)
+        self.register_task(self.notify, 'notify')
 
     def send_email(self, address, topic, message):
         print()
@@ -93,7 +94,7 @@ if __name__ == '__main__':
     # normally would not have permission to edit them, hence the `force` flag
     service.clear_table('reservations', force=True)
     service.clear_table('restaurants', force=True)
-    service.init_table('restaurants', restaurants_data, force=True)
+    # service.init_table('restaurants', restaurants_data, force=True)
 
     # running the service. If reservation service is run afterwards, all the
     # reservation data added via reservation service will be automatically added
