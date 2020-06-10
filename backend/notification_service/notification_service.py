@@ -10,6 +10,8 @@ from sqlalchemy.ext.declarative import declarative_base
 import datetime
 import service
 
+from django_email_celery.mailing_app.mailing import send_email_task
+
 EMAIL_ADDR = 'cyanide_service@wp.pl'
 PASSWORD = 'password'
 
@@ -42,15 +44,19 @@ class NotificationService(service.Service):
             self.db_con = sql_alchemy_connector.\
                 SQLAlchemyConnector([Restaurant, Reservation],
                                     url="localhost", db_name='postgres',
-                                    username='notification_service', password='password')
+                                    username='reservation_service', password='password')
             base.metadata.create_all(self.db_con.db)
 
     def send_email(self, address, topic, message):
+        send_email_task()
         print()
         print(topic)
         print(message)
         pass
         # CALL EMAIL SENDING PROCEDURE VIA CELERY
+
+    def try_send_email(self):
+        send_email_task()
 
     def get_today(self):
         return date.today()
@@ -85,7 +91,7 @@ if __name__ == '__main__':
                         zip(restaurant_ids, restaurant_names, addresses)]
 
     # initiating the service
-    service = NotificationService(use_mock_database=False)
+    service = NotificationService(use_mock_database=True)
 
     # clearing all tables (firstly the reservation table not to violate
     # constrains) and filling the restaurants table with initial data.
@@ -94,6 +100,10 @@ if __name__ == '__main__':
     service.clear_table('reservations', force=True)
     service.clear_table('restaurants', force=True)
     service.init_table('restaurants', restaurants_data, force=True)
+
+    send_email_task()
+
+    print ("finish call send_mail")
 
     # running the service. If reservation service is run afterwards, all the
     # reservation data added via reservation service will be automatically added

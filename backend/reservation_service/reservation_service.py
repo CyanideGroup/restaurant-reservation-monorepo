@@ -106,7 +106,7 @@ if __name__ == '__main__':
     #     for reserv_id, email, rest_id in zip(reserv_ids, emails, rest_ids)]
 
     # creating the service instance
-    service = ReservationService(use_mock_database=False)
+    service = ReservationService(use_mock_database=True)
 
     # force-cleaning
     service.clear_table('reservations')
