@@ -4,7 +4,7 @@ from sqlalchemy.orm import relationship
 
 currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parentdir = os.path.dirname(currentdir)
-sys.path.insert(0,parentdir)
+sys.path.insert(0, parentdir)
 
 from datetime import date
 from database_connector import db_connector, sql_alchemy_connector
@@ -29,7 +29,7 @@ class SearchService(service.Service):
                 address = Column(String)
                 country = Column(String)
                 cuisine = Column(String)
-                timestep = Column(Integer)
+                # timestep = Column(Integer)
                 opens = Column(sqlalchemy.types.Time)
                 closes = Column(sqlalchemy.types.Time)
                 rated = Column(Integer)
@@ -38,12 +38,11 @@ class SearchService(service.Service):
                 __tablename__ = 'tables'
                 __table_args__ = {'schema': 'search_microservice'}
                 _id = Column(Integer, primary_key=True)
-                label = Column(String)
                 restaurant_id = Column(Integer, ForeignKey(
                     'search_microservice.restaurants._id'))
                 restaurant = relationship('Restaurant')
-                smoking = Column(sqlalchemy.types.Boolean)
-                outside = Column(sqlalchemy.types.Boolean)
+                # smoking = Column(sqlalchemy.types.Boolean)
+                # outside = Column(sqlalchemy.types.Boolean)
                 size = Column(Integer)
 
             class Reservation(base):
@@ -64,40 +63,34 @@ class SearchService(service.Service):
             base.metadata.create_all(self.db_con.db)
         self.register_task(self.search, 'search')
 
-    def search(self, restaurant_id, date, filter=None):
-        restaurant_info = self.db_con.select('restaurants', filter={'_id':restaurant_id})[0]
-        opens = restaurant_info['opens']
-        time_step = restaurant_info['timestep']
-        closes = restaurant_info['closes']
-        start_time = datetime.datetime.combine(date, opens)
-        end_time = datetime.datetime.combine(date, closes)
-        time = start_time
-        times = []
-        while time < end_time:
-            times.append(time)
-            time += datetime.timedelta(minutes=time_step)
-        if filter is None:
-            filter = {}
-        filter['restaurant_id'] = restaurant_id
-        tables = self.db_con.select('tables', filter=filter, as_dict=True)
-        reservations = self.db_con.select('reservations', filter={'table_id': [t['_id'] for t in tables], 'date':date}, as_dict=True)
-        data = {}
-        reservation_time = datetime.timedelta(hours=3)
-        for time in times:
-            for table in tables:
-                is_free = True
-                for reservation in reservations:
-                    if time not in data.keys():
-                        data[time] = []
-                    res_time = reservation['time']
-                    res_datetime = datetime.datetime.combine(date, res_time)
-                    if reservation['table_id'] == table['_id'] \
-                        and time - reservation_time < res_datetime < time + reservation_time:
-                        is_free = False
-                        break
-                if is_free:
-                    data[time].append(table)
-        return data
+
+    def search(self, date, time, guests, restaurant_name=None, location=None):
+        like_filter = {}
+        if restaurant_name is not None:
+            like_filter['name'] = restaurant_name
+        if location is not None:
+            like_filter['address'] = location
+        restaurant_filter = {'opens_max':time, 'closes_min':time}
+        res_duration = datetime.timedelta(hours=3)
+        srch_datetime = datetime.datetime.combine(date, time)
+        restaurants = self.db_con.select('restaurants', like_filter=like_filter, filter=restaurant_filter)
+        tables = self.db_con.select('tables', filter={'restaurant_id': [r['_id'] for r in restaurants], 'size_min': guests})
+        reservations = self.db_con.select('reservations', filter={'table_id': [t['_id'] for t in tables], 'date': date})
+        free_restaurants = []
+
+        for table in tables:
+            if table['restaurant_id'] in [r['_id'] for r in free_restaurants]:
+                continue
+            table_reservations = filter(lambda res:res['table_id']==table['_id'], reservations)
+            occupied = False
+            for res in table_reservations:
+                res_time = datetime.datetime.combine(res['date'], res['time'])
+                if res_time<srch_datetime+res_duration and res_time>srch_datetime-res_duration:
+                    occupied = True
+                    break
+            if not occupied:
+                free_restaurants.append(list(filter(lambda x: x['_id'] == table['restaurant_id'], restaurants))[0])
+        return free_restaurants
 
 if __name__ == '__main__':
     # Generating initial restaurant table data
@@ -108,7 +101,7 @@ if __name__ == '__main__':
                         zip(restaurant_ids, restaurant_names, addresses)]
 
     # generating initial tables data
-    num_tables = 32
+    num_tables = 4
     table_ids = [i for i in range(num_tables)]
     tables_data = [{'_id': table_ids[i], 'label': str(i), 'size': i % 3 + 2,
                     'restaurant_id': restaurant_ids[i % len(restaurant_names)],
@@ -131,9 +124,9 @@ if __name__ == '__main__':
     service.clear_table('restaurants', force=True)
 
     # Initiating tables
-    #service.init_table('restaurants', restaurants_data, force=True)
-    #service.init_table('tables', tables_data, force=True)
-    #service.init_table('reservations', reservations_data, force=True)
+    service.init_table('restaurants', restaurants_data, force=True)
+    service.init_table('tables', tables_data, force=True)
+    service.init_table('reservations', reservations_data, force=True)
 
-    service.search(rest_ids[0], datetime.date.today())
+    service.search(date=datetime.date.today(), guests=1, time=datetime.time(6), restaurant_name='mcd')
     service.run()

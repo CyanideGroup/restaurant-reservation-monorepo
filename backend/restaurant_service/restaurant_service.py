@@ -65,6 +65,7 @@ class RestaurantService(service.Service):
             base.metadata.create_all(self.db_con.db)
         self.register_task(self.get_restaurants, 'get_restaurants')
         self.register_task(self.create_table, 'create_table')
+        self.register_task(self.delete_table, 'delete_table')
         self.register_task(self.create_restaurant, 'create_restaurant')
         self.register_task(self.get_reservations_by_restaurant_id, 'get_reservations')
 
@@ -74,9 +75,14 @@ class RestaurantService(service.Service):
         return created, data
 
     def create_table(self, data):
-        self.log('create restaurant function called', type='RPC RECV')
+        self.log('create table function called', type='RPC RECV')
         created, data = self.create_record('tables', data)
         return created, data
+
+    def delete_table(self, table_id):
+        self.log('delete table function called', type='RPC RECV')
+        deleted = self.delete_record('tables', table_id)
+        return deleted
 
     def get_restaurants(self, filter=None):
         self.log('get restaurant function called', type='RPC RECV')

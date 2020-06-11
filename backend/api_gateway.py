@@ -19,6 +19,9 @@ def create_restaurant(data):
 def create_table(data):
     return restaurant_service.use_server('restaurant_service').create_table(data)
 
+def delete_table(table_id):
+    return restaurant_service.use_server('restaurant_service').delete_table(table_id)
+
 def create_reservation(data):
     return reservation_service.use_server('reservation_service').create_reservation(data)
 
@@ -43,9 +46,19 @@ def index():
 def reservation():
     if request.method == 'POST':
         data = request.get_json()
+        data['date'] = datetime.date(*data['date'].split('.'))
+        data['time'] = datetime.time(*data['date'].split(':'))
+        created, data = reservation_service.use_server('reservation_service').create_reservation(data)
+        return f'Reservation ID: {data["id"]}'
+    return 'Make a reservation'
+
+@app.route('/search', methods=['GET', 'POST'])
+def srch():
+    if request.method == 'POST':
+        data = request.get_json()
         reservation_json = {'email': 'new_email@gmail.com', 'date': data['date'], 'time': data['time'], 'guests': 3, 'restaurant_id': data['restaurantId']}
-        created, id = reservation_service.use_server('reservation_service').create_reservation(reservation_json)
-        return f'Reservation ID: {id}'
+        created, data = reservation_service.use_server('reservation_service').create_reservation(reservation_json)
+        return f'Reservation ID: {data["id"]}'
     return 'Make a reservation'
 
 if __name__ == '__main__':
@@ -88,20 +101,3 @@ if __name__ == '__main__':
             create_reservation(row)
     
     # app.run()
-
-
-# connection = pika.BlockingConnection(pika.ConnectionParameters('localhost'))
-# channel = connection.channel()
-# # channel.exchange_declare(exchange='new_reservation', exchange_type='fanout')
-
-# restaurant_json = {'method': 'create', 'name': 'restaurant123',
-#                    'address': 'restaurant street 123'}
-
-# # channel.basic_publish(exchange='restaurants', routing_key='', body=str(restaurant_json))
-
-# # RPC test
-# print(created)
-# print(id)
-
-# print("[x] new reservation")
-# connection.close()
