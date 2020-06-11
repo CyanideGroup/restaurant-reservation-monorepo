@@ -3,20 +3,9 @@ import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import {ApiGatewayService} from './services/ApiGatewayService';
 import './styles/ReservationPage.css';
+import { formatDate } from './utils/formatDate';
 
 
-const formatDate = (date: Date) => {
-  let month = '' + (date.getMonth() + 1);
-  let day = '' + date.getDate();
-  let year = date.getFullYear();
-
-  if (month.length < 2) 
-    month = '0' + month;
-  if (day.length < 2) 
-    day = '0' + day;
-
-  return [year, month, day].join('-');
-}
 
 const getGuestsArray = (number: number) => {
   let array = [];
@@ -26,7 +15,7 @@ const getGuestsArray = (number: number) => {
   return array;
 }
 
-export const ReservationPage = ({apiGatewayService}: {apiGatewayService: ApiGatewayService}) => {
+export const ReservationPage = ({apiGatewayService, setAppContent}: {apiGatewayService: ApiGatewayService, setAppContent: (arg: string) => void}) => {
   const [date, setDate] = useState(new Date());
   const [hour, setHour] = useState('');
   const maxGuestsNumber = 9;
@@ -101,7 +90,7 @@ export const ReservationPage = ({apiGatewayService}: {apiGatewayService: ApiGate
       <div className="ButtonReserve">
         <button
           className="reservation__button"
-          onClick={async () =>
+          onClick={async () => {
             console.log(
               await apiGatewayService.reserve({
                 date,
@@ -109,6 +98,8 @@ export const ReservationPage = ({apiGatewayService}: {apiGatewayService: ApiGate
                 restaurantId: "1",
               })
             )
+            setAppContent('reserved');
+          }
           }
         >
           Reserve
