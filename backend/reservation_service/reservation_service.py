@@ -69,8 +69,9 @@ class ReservationService(service.Service):
         self.register_task(self.create_reservation, 'create_reservation')
         self.register_task(self.get_reservation_by_id, 'get_reservation_by_id')
         self.register_task(self.get_user_reservations, 'get_user_reservations')
+        self.register_task(self.search_terms, 'search_terms')
 
-    def search(self, restaurant_id, date, filter=None):
+    def search_terms(self, restaurant_id, date, filter=None):
         restaurant_info = self.db_con.select('restaurants', filter={'_id':restaurant_id})[0]
         opens = restaurant_info['opens']
         time_step = restaurant_info['timestep']
@@ -151,17 +152,18 @@ if __name__ == '__main__':
     service = ReservationService(use_mock_database=False)
 
     # force-cleaning
-    service.clear_table('reservations')
-    service.clear_table('tables', force=True)
-    service.clear_table('restaurants', force=True)
+    # service.clear_table('reservations')
+    # service.clear_table('tables', force=True)
+    # service.clear_table('restaurants', force=True)
+
     # Initiating tables
-    service.init_table('restaurants', restaurants_data, force=True)
-    service.init_table('tables', tables_data, force=True)
-    service.init_table('reservations', reservations_data)
+    # service.init_table('restaurants', restaurants_data, force=True)
+    # service.init_table('tables', tables_data, force=True)
+    # service.init_table('reservations', reservations_data)
 
     reservation_json = {'restaurant_id':rest_ids[0], 'email': 'new_email@gmail.com',
                         'date': datetime.date.today(), 'time': 'dinner'}
     # service.create_record('reservations', {'_id': 7, 'email': 'email@email.com', 'restaurant_id': 1,'date': datetime.date.today(), 'time': 'breakfast'})
     # service.create_reservation(reservation_json)
-    service.search(restaurant_id=0, date=datetime.date.today())
+    # service.search_terms(restaurant_id=0, date=datetime.date.today())
     service.run()

@@ -117,9 +117,9 @@ if __name__ == '__main__':
     service = RestaurantService(use_mock_database=False)
 
     # force-cleaning
-    service.clear_table('reservations', force=True)
-    service.clear_table('tables', force=True)
-    service.clear_table('restaurants', force=True)
+    # service.clear_table('reservations', force=True)
+    # service.clear_table('tables', force=True)
+    # service.clear_table('restaurants', force=True)
 
     # Initiating tables
     # service.init_table('restaurants', restaurants_data)

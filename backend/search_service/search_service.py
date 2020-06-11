@@ -76,10 +76,10 @@ class SearchService(service.Service):
         restaurants = self.db_con.select('restaurants', like_filter=like_filter, filter=restaurant_filter)
         tables = self.db_con.select('tables', filter={'restaurant_id': [r['_id'] for r in restaurants], 'size_min': guests})
         reservations = self.db_con.select('reservations', filter={'table_id': [t['_id'] for t in tables], 'date': date})
-        free_restaurants = []
+        free_restaurants = {}
 
         for table in tables:
-            if table['restaurant_id'] in [r['_id'] for r in free_restaurants]:
+            if table['restaurant_id'] in free_restaurants.keys():
                 continue
             table_reservations = filter(lambda res:res['table_id']==table['_id'], reservations)
             occupied = False
@@ -89,7 +89,7 @@ class SearchService(service.Service):
                     occupied = True
                     break
             if not occupied:
-                free_restaurants.append(list(filter(lambda x: x['_id'] == table['restaurant_id'], restaurants))[0])
+                free_restaurants[table['restaurant_id']] = list(filter(lambda x: x['_id'] == table['restaurant_id'], restaurants))[0]
         return free_restaurants
 
 if __name__ == '__main__':
@@ -119,14 +119,14 @@ if __name__ == '__main__':
     service = SearchService(use_mock_database=False)
 
     # force-cleaning
-    service.clear_table('reservations', force=True)
-    service.clear_table('tables', force=True)
-    service.clear_table('restaurants', force=True)
+    # service.clear_table('reservations', force=True)
+    # service.clear_table('tables', force=True)
+    # service.clear_table('restaurants', force=True)
 
     # Initiating tables
-    service.init_table('restaurants', restaurants_data, force=True)
-    service.init_table('tables', tables_data, force=True)
-    service.init_table('reservations', reservations_data, force=True)
+    # service.init_table('restaurants', restaurants_data, force=True)
+    # service.init_table('tables', tables_data, force=True)
+    # service.init_table('reservations', reservations_data, force=True)
 
     service.search(date=datetime.date.today(), guests=1, time=datetime.time(6), restaurant_name='mcd')
     service.run()

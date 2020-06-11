@@ -34,8 +34,11 @@ def get_reservations_rest(restaurant_id):
 def notify():
     notification_service.use_server('notification_service').notify()
 
-def search(filter):
-    return search_service.use_server('search_service').search(filter)
+def search_restaurants(date, time, guests, restaurant_name=None, location=None):
+    return search_service.use_server('search_service').search(date, time, guests, restaurant_name, location)
+
+def search_terms(restaurant_id, date, filters=None):
+    return search_service.use_server('reservation_service').search_terms(restaurant_id, date, filters)
 
 
 @app.route('/')
@@ -48,18 +51,31 @@ def reservation():
         data = request.get_json()
         data['date'] = datetime.date(*data['date'].split('.'))
         data['time'] = datetime.time(*data['date'].split(':'))
-        created, data = reservation_service.use_server('reservation_service').create_reservation(data)
+        created, data = create_reservation(data)
         return f'Reservation ID: {data["id"]}'
-    return 'Make a reservation'
+    date = datetime.date(*[int(arg) for arg in request.args.get('date').split('.')])
+    restaurant_id = request.args.get('restaurant_id')
+    result = search_terms(restaurant_id, date)
+    dict = {}
+    for key, value in result.items():
+        dict[str(key)] = value
+    return dict
 
 @app.route('/search', methods=['GET', 'POST'])
-def srch():
-    if request.method == 'POST':
-        data = request.get_json()
-        reservation_json = {'email': 'new_email@gmail.com', 'date': data['date'], 'time': data['time'], 'guests': 3, 'restaurant_id': data['restaurantId']}
-        created, data = reservation_service.use_server('reservation_service').create_reservation(reservation_json)
-        return f'Reservation ID: {data["id"]}'
-    return 'Make a reservation'
+def search():
+    if request.method == 'GET':
+        date = datetime.date(*[int(arg) for arg in request.args.get('date').split('.')])
+        time = datetime.time(*[int(arg) for arg in request.args.get('time').split(':')])
+        name = request.args.get('name')
+        address = request.args.get('address')
+        guests = request.args.get('guests')
+        available_restaurants = search_restaurants(date, time, guests, name, address)
+        for key, values in available_restaurants.items():
+            available_restaurants[key]['opens'] = str(available_restaurants[key]['opens'])
+            available_restaurants[key]['closes'] = str(available_restaurants[key]['closes'])
+            # available_restaurants[key]['timestep'] = str(available_restaurants[key]['timestep'])
+        return available_restaurants
+    return 'nic'
 
 if __name__ == '__main__':
     test = True
@@ -91,13 +107,13 @@ if __name__ == '__main__':
 
 
         # Populating data
-        for row in restaurants_data:
-            create_restaurant(row)
-        time.sleep(0.5)
-        for row in tables_data:
-            create_table(row)
-        time.sleep(0.5)
-        for row in reservations_data:
-            create_reservation(row)
+        # for row in restaurants_data:
+        #     create_restaurant(row)
+        # time.sleep(0.5)
+        # for row in tables_data:
+        #     create_table(row)
+        # time.sleep(0.5)
+        # for row in reservations_data:
+        #     create_reservation(row)
     
-    # app.run()
+    app.run()
