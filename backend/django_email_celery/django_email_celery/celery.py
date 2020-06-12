@@ -6,7 +6,8 @@ from celery import Celery
 # from __future__ import absolute_import
 
 # set the default Django settings module for the 'celery' program.
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'django_email_celery.settings')
+# os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'django_email_celery.settings')
+os.environ['DJANGO_SETTINGS_MODULE'] = 'django_email_celery.settings'
 
 app = Celery('django_email_celery')
 

@@ -10,7 +10,7 @@ from sqlalchemy.ext.declarative import declarative_base
 import datetime
 import service
 
-from django_email_celery.mailing_app.mailing import send_email_task
+from notification_service.mailing import  async_send_mail_with_callback
 
 EMAIL_ADDR = 'cyanide_service@wp.pl'
 PASSWORD = 'password'
@@ -48,15 +48,15 @@ class NotificationService(service.Service):
             base.metadata.create_all(self.db_con.db)
 
     def send_email(self, address, topic, message):
-        send_email_task()
+        async_send_mail_with_callback(address,topic,message)
         print()
         print(topic)
         print(message)
         pass
         # CALL EMAIL SENDING PROCEDURE VIA CELERY
 
-    def try_send_email(self):
-        send_email_task()
+    # def try_send_email(self):
+    #     send_email_task()
 
     def get_today(self):
         return date.today()
@@ -101,7 +101,7 @@ if __name__ == '__main__':
     service.clear_table('restaurants', force=True)
     service.init_table('restaurants', restaurants_data, force=True)
 
-    send_email_task()
+    # send_email_task()
 
     print ("finish call send_mail")
 
