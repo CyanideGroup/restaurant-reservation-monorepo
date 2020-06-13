@@ -3,7 +3,7 @@ import { useHistory } from 'react-router';
 import { formatDateDMY } from './utils/formatDate';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
-import calendarImg from './styles/assets/calendar.svg';
+const calendarImg = require('./styles/assets/calendar.svg');
 import Select from 'react-select';
 
 const getPossibleHours = () => {

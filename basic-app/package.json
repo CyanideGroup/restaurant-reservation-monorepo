@@ -40,6 +40,6 @@
   "scripts": {
     "start": "webpack-dev-server --mode development --progress",
     "build": "webpack --mode production --progress",
-    "test": "mocha -r ts-node/register -r test/noop.ts 'test/**/*.{ts,tsx}'"
+    "test": "mocha -r test/noop.ts -r ts-node/register 'test/**/*.{ts,tsx}'"
   }
 }
