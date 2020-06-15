@@ -13,6 +13,7 @@ from sqlalchemy.ext.declarative import declarative_base
 import sqlalchemy
 import datetime
 import service
+from backend.database_init import get_init_data
 
 class RestaurantService(service.Service):
     def __init__(self, name='restaurant_service', use_mock_database=False):
@@ -33,6 +34,7 @@ class RestaurantService(service.Service):
                 opens = Column(sqlalchemy.types.Time)
                 closes = Column(sqlalchemy.types.Time)
                 rated = Column(Integer)
+                owner = Column(String)
 
             class Table(base):
                 __tablename__ = 'tables'
@@ -99,29 +101,22 @@ class RestaurantService(service.Service):
 
 
 if __name__ == '__main__':
-    # Generating initial restaurant table data
-    restaurant_names = ['kfc', 'burgerking', 'subway', 'mcdonalds']
-    addresses = [f'{name} street' for name in restaurant_names]
-    restaurant_ids = [i for i in range(len(restaurant_names))]
-    restaurants_data = [{'_id': id, 'name': name, 'address': address, 'opens':datetime.time(7), 'closes': datetime.time(23), 'timestep':30} for id, name, address in
-                        zip(restaurant_ids, restaurant_names, addresses)]
-
-    # generating initial tables data
-    num_tables = 32
-    table_ids = [i for i in range(num_tables)]
-    tables_data = [{'_id': table_ids[i], 'label': str(i), 'size': i % 3 + 2,
-                    'restaurant_id': restaurant_ids[i % len(restaurant_names)],
-                    'outside': i % 2, 'smoking': i % 2} for i in range(num_tables)]
-
     # creating the service instance
     service = RestaurantService(use_mock_database=False)
+
+    # dropping tables for reinitialisation
+    # service.drop_table('reservations')
+    # service.drop_table('tables')
+    # service.drop_table('restaurants')
 
     # force-cleaning
     # service.clear_table('reservations', force=True)
     # service.clear_table('tables', force=True)
     # service.clear_table('restaurants', force=True)
 
+
     # Initiating tables
+    # restaurants_data, tables_data, reservations_data = get_init_data()
     # service.init_table('restaurants', restaurants_data)
     # service.init_table('tables', tables_data)
     # service.init_table('reservations', reservations_data, force=True)

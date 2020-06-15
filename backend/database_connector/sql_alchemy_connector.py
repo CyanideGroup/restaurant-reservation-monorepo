@@ -103,6 +103,13 @@ class SQLAlchemyConnector(DBConnector):
             self.session.commit()
         return True
 
+    def drop(self, table_name, commit=True):
+        table_class = self.table_data[table_name]
+        table_class.__table__.drop(self.db)
+        if commit:
+            self.session.commit()
+        return True
+
     def update(self, table_name, data):
         """
         TODO:

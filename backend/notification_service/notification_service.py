@@ -15,6 +15,11 @@ PASSWORD = 'password'
 
 class NotificationService(service.Service):
     def __init__(self, name='notification_service', use_mock_database=False):
+        """
+        TODO: CHANGE DATABASE STRUCTURE!!!!!! (RESERVATION TO TABLE NOT RESTAURANT)
+        :param name:
+        :param use_mock_database:
+        """
         super().__init__(name, table_names=['reservations', 'restaurants'])
         if use_mock_database:
             self.db_con = db_connector.DBConnectorMock()
@@ -76,25 +81,24 @@ class NotificationService(service.Service):
                             f'location {row.address}, {row.time},'
                             f'a table for {row.guests}')
 
+
 if __name__ == '__main__':
-    # generating initial data for restaurants
-    restaurant_names = ['kfc', 'burgerking', 'subway', 'mcdonalds']
-    addresses = [f'{name} street' for name in restaurant_names]
-    restaurant_ids = [i for i in range(len(restaurant_names))]
-    restaurants_data = [{'_id': id, 'name': name, 'address': address} for
-                        id, name, address in
-                        zip(restaurant_ids, restaurant_names, addresses)]
 
     # initiating the service
     service = NotificationService(use_mock_database=False)
+
+    # dropping tables for reinitialisation
+    # service.drop_table('reservations')
+    # service.drop_table('tables')
+    # service.drop_table('restaurants')
 
     # clearing all tables (firstly the reservation table not to violate
     # constrains) and filling the restaurants table with initial data.
     # Since notification service is not the owner of any tables, it
     # normally would not have permission to edit them, hence the `force` flag
-    service.clear_table('reservations', force=True)
-    service.clear_table('restaurants', force=True)
-    # service.init_table('restaurants', restaurants_data, force=True)
+    # service.clear_table('reservations', force=True)
+    # service.clear_table('tables', force=True)
+    # service.clear_table('restaurants', force=True)
 
     # running the service. If reservation service is run afterwards, all the
     # reservation data added via reservation service will be automatically added

@@ -120,36 +120,14 @@ class ReservationService(service.Service):
 
 if __name__ == '__main__':
 
-    # Generating initial restaurant table data
-    restaurant_names = ['kfc', 'burgerking', 'subway', 'mcdonalds']
-    addresses = [f'{name} street' for name in restaurant_names]
-    restaurant_ids = [i for i in range(len(restaurant_names))]
-    restaurants_data = [
-        {'_id': id, 'name': name, 'address': address, 'opens': datetime.time(7), 'closes': datetime.time(23),
-         'timestep': 30} for id, name, address in
-        zip(restaurant_ids, restaurant_names, addresses)]
-    # generating initial tables data
-    num_tables = 32
-    table_ids = [i for i in range(num_tables)]
-    tables_data = [{'_id': table_ids[i],'label': str(i), 'size': i % 3 + 2, 'restaurant_id': restaurant_ids[i % len(restaurant_names)],
-                    'outside': i % 2, 'smoking': i % 2} for i in range(num_tables)]
-
-    # generating initial reservations data
-    user_names = ['tomek', 'robert', 'justyna', 'anton', 'khanh', 'pawel']
-    emails = [f'{name}@gmail.com' for name in user_names]
-    rest_ids = [i%len(restaurant_names) for i in range(len(user_names))]
-    reserv_ids = [i for i in range(len(user_names))]
-    reservations_data = [{'email': email, 'table_id': table_id, 'date': datetime.date.today(), 'time': datetime.time(11)}
-                         for reserv_id, email, table_id in zip(reserv_ids, emails, table_ids)]
-
-
-    # reservations_data = [
-    #     {'email': email, 'restaurant_id': rest_id,
-    #      'date': datetime.date.today(), 'time': 'breakfast'}
-    #     for reserv_id, email, rest_id in zip(reserv_ids, emails, rest_ids)]
 
     # creating the service instance
     service = ReservationService(use_mock_database=False)
+
+    # dropping tables for reinitialisation
+    # service.drop_table('reservations')
+    # service.drop_table('tables')
+    # service.drop_table('restaurants')
 
     # force-cleaning
     # service.clear_table('reservations')
@@ -157,13 +135,9 @@ if __name__ == '__main__':
     # service.clear_table('restaurants', force=True)
 
     # Initiating tables
+    # restaurants_data, tables_data, reservations_data = get_init_data()
     # service.init_table('restaurants', restaurants_data, force=True)
     # service.init_table('tables', tables_data, force=True)
     # service.init_table('reservations', reservations_data)
 
-    reservation_json = {'restaurant_id':rest_ids[0], 'email': 'new_email@gmail.com',
-                        'date': datetime.date.today(), 'time': 'dinner'}
-    # service.create_record('reservations', {'_id': 7, 'email': 'email@email.com', 'restaurant_id': 1,'date': datetime.date.today(), 'time': 'breakfast'})
-    # service.create_reservation(reservation_json)
-    # service.search_terms(restaurant_id=0, date=datetime.date.today())
     service.run()

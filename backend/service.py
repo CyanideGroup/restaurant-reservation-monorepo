@@ -197,6 +197,9 @@ class Service:
             cleared = self.db_con.clear(table_name)
         return cleared
 
+    def drop_table(self, table_name):
+        self.db_con.drop(table_name)
+
     def init_table(self, table_name, data, force=False):
         for row in data:
             self.create_record(table_name, row, force)
