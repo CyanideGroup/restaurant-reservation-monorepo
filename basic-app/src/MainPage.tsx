@@ -5,6 +5,7 @@ import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 const calendarImg = require('./styles/assets/calendar.svg');
 import Select from 'react-select';
+import { Search } from './services/ApiGatewayService';
 
 const getPossibleHours = () => {
   var arr = [], i, j;
@@ -25,10 +26,16 @@ const getGuestsArray = (number: number) => {
   return array;
 }
 
-export const MainPage = ({setIsLogged}: {setIsLogged: (arg: any) => void} ) => {
+export const MainPage = ({setIsLogged, apiGatewayService}: {apiGatewayService: any, setIsLogged: (arg: any) => void} ) => {
   const history = useHistory();
+  const onSearch = async (search: Search) => {
+    console.log(search);
+    const result = await apiGatewayService.getRestaurants(search);
+    console.log(result);
+  };
+
   return <div>Main Page
-    <SearchBar/>
+    <SearchBar onSearch={onSearch}/>
     <button onClick={() => setIsLogged(true)}>Log in</button>
     <button onClick={() => history.push('/priv')}>Go to private</button>
     
@@ -36,16 +43,12 @@ export const MainPage = ({setIsLogged}: {setIsLogged: (arg: any) => void} ) => {
 };
 
 
-const SearchBar = () => {
+const SearchBar = ({onSearch}: {onSearch: any}) => {
   const [date, setDate] = useState(new Date());
   const [guestNumber, setGuestNumber] = useState('1');
   const [hour, setHour] = useState(date.getHours().toString());
   const [searchValue, setSearchValue] = useState('');
   const guestArr = getGuestsArray(9);
-
-  const onSearch = () => {
-    console.log('Wybrane: ', date, guestNumber, hour, searchValue)
-  }
   
   return <div className='search-bar'>
     <div className='search-bar-content'>
@@ -53,7 +56,7 @@ const SearchBar = () => {
         <Select  options={getPossibleHours()} value={{value: hour, label: hour}} onChange={(arg: any) => setHour(arg.value)}/>
       </div>
       <div className='search-bar-element'>
-        <Select options={guestArr} value={{value: guestArr[guestNumber].value, label: guestArr[guestNumber].label}} onChange={(arg: any) =>setGuestNumber(arg.value)}/>
+        <Select options={guestArr} value={{value: guestArr[parseInt(guestNumber) - 1].value, label: guestArr[parseInt(guestNumber) - 1].label}} onChange={(arg: any) => setGuestNumber(arg.value)}/>
       </div>
       <div className='search-bar-element'>
         <DateInput date={date} setDate={setDate}/>
@@ -62,7 +65,7 @@ const SearchBar = () => {
         <SearchInput setSearchValue={setSearchValue}/>
       </div>
       <div className='search-bar-element'>
-        <button className='search-bar-button' onClick={onSearch}>
+        <button className='search-bar-button' onClick={() => onSearch({date, time: hour, guests: guestNumber, address: searchValue})}>
           Wyszukaj
         </button>
       </div>
@@ -117,7 +120,7 @@ const DateInput = ({date, setDate}: DateInputProps) => {
       <input className='basic-input data-input-input' placeholder={formatDateDMY(date)}></input>
       <div className='data-input-button-wrapper'>
         <button className='data-input-button' onClick={() => setCalendarVisible(!calendarVisible)}/>
-        <img className='data-input-button-img' src={calendarImg}/>
+        <img className='data-input-button-img' src={calendarImg.default}/>
       </div>
     </div>
     <div ref={ref} className='calendar'>

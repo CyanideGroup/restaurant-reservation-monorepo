@@ -12,7 +12,7 @@ const App = () => {
   const [isLogged, setIsLogged] = useState(false);
   
   return <Switch>
-      <Route path='/' exact component={() => <MainPage setIsLogged={setIsLogged}/>}/>
+      <Route path='/' exact component={() => <MainPage apiGatewayService={apiGatewayService} setIsLogged={setIsLogged}/>}/>
       <Route path='/reservation' exact>
         <ReservationPage setAppContent={() => history.push('/reserved')} apiGatewayService={apiGatewayService}/>
       </Route>
