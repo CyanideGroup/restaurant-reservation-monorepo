@@ -45,6 +45,25 @@ type Reservation = {
   restaurantId: string;
 }
 
+export type Search = {
+  date: Date;
+  time: string;
+  guests: number;
+  name?: string;
+  address?: string;
+}
+
+const parseDate = (date: Date) => `${date.getFullYear()}.${date.getMonth()}.${date.getDay()}`;
+
+const parseSearch = ({date, time, guests, name, address}: Search) => {
+  let query = `time=${time}:00&guests=${guests}&date=${parseDate(date)}`;
+  if (name)
+    query += `name=${name}`;
+  if (address)
+    query += `address=${address}`;
+  return query;
+}
+
 export class ApiGatewayService {
   private http: HttpFunction;
   constructor(apiGatewayUrl: string){
@@ -53,5 +72,10 @@ export class ApiGatewayService {
 
   reserve(reservation: Reservation) {
     return this.http('POST', '/reservation', reservation);
+  }
+
+  getRestaurants(search: Search) {
+    const searchQuery = parseSearch(search);
+    return this.http('GET', `/search?${searchQuery}`);
   }
 };
