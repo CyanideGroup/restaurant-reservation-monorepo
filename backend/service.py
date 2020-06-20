@@ -94,7 +94,7 @@ class Service:
             if 'method' in data.keys():
 
                 method = data.pop('method')
-                self.log(topic=f'Table {table_name} updated with {method.upper()}.',
+                self.log(topic=f'Table {table_name} updated with {method.upper()}.', type='EB RCV',
                          content=f'Event data:{data}')
                 if method == 'create':
                     self.create_record(table_name, data, force=True)
@@ -138,17 +138,18 @@ class Service:
                              f'Call this method via RPC on a service that owns'
                              f'the table')
         if table_name in self.owned_tables:
-            created, id = self.db_con.create(table_name, data)
+            created, data = self.db_con.create(table_name, data)
             if created:
                 # if record has been successfully created, fire an event to
                 # inform other microservices of new record
                 data['method'] = 'create'
-                data['_id']=id
+                # data['_id']=id
                 self.channel.basic_publish(exchange=table_name, routing_key='',
                                            body=str(data))
+                self.log(f'Record added to table {table_name}, publishing update event', type='EB CALL')
         else:
-            created, id = self.db_con.create(table_name, data)
-        return created, id
+            created, data = self.db_con.create(table_name, data)
+        return created, data
 
 
     def update_record(self, table_name, data, force=False):
@@ -195,6 +196,9 @@ class Service:
         else:
             cleared = self.db_con.clear(table_name)
         return cleared
+
+    def drop_table(self, table_name):
+        self.db_con.drop(table_name)
 
     def init_table(self, table_name, data, force=False):
         for row in data:

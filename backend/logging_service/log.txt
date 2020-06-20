@@ -129,3 +129,162 @@
 21:12:46.034078		AUTHOR:notification_service		TOPIC:Adding record to table restaurants		TYPE:log		DEBUG		
 21:12:46.036099		AUTHOR:notification_service		TOPIC:Adding record to table restaurants		TYPE:log		DEBUG		
 21:12:46.039064		AUTHOR:notification_service		TOPIC:Adding record to table restaurants		TYPE:log		DEBUG		
+14:29:07.212366		AUTHOR:notification_service		TOPIC:Adding record to table restaurants		TYPE:RPC RECV		DEBUG		
+14:29:07.223360		AUTHOR:notification_service		TOPIC:Adding record to table restaurants		TYPE:RPC RECV		DEBUG		
+14:29:07.225359		AUTHOR:notification_service		TOPIC:Adding record to table restaurants		TYPE:RPC RECV		DEBUG		
+14:29:07.227360		AUTHOR:notification_service		TOPIC:Adding record to table restaurants		TYPE:RPC RECV		DEBUG		
+14:29:09.832954		AUTHOR:notification_service		TOPIC:Table reservations updated with CLEAR.		TYPE:EB RECV		DEBUG		CONTENT:Event data:{}
+14:29:09.834952		AUTHOR:reservation_service		TOPIC:Adding record to table restaurants		TYPE:RPC RECV		DEBUG		
+14:29:09.843965		AUTHOR:reservation_service		TOPIC:Adding record to table restaurants		TYPE:RPC RECV		DEBUG		
+14:29:09.845956		AUTHOR:reservation_service		TOPIC:Adding record to table restaurants		TYPE:RPC RECV		DEBUG		
+14:29:09.847956		AUTHOR:reservation_service		TOPIC:Adding record to table restaurants		TYPE:RPC RECV		DEBUG		
+14:29:09.849957		AUTHOR:reservation_service		TOPIC:Adding record to table reservations		TYPE:RPC RECV		DEBUG		
+14:29:09.853957		AUTHOR:reservation_service		TOPIC:Record added to tablereservations, publishing update event		TYPE:EB CALL		DEBUG		
+14:29:09.853957		AUTHOR:reservation_service		TOPIC:Adding record to table reservations		TYPE:RPC RECV		DEBUG		
+14:29:09.854959		AUTHOR:notification_service		TOPIC:Table reservations updated with CREATE.		TYPE:EB RECV		DEBUG		CONTENT:Event data:{'email': 'tomek@gmail.com', 'restaurant_id': 0, 'date': datetime.date(2020, 6, 8), 'time': 'breakfast', '_id': 11}
+14:29:09.854959		AUTHOR:notification_service		TOPIC:Adding record to table reservations		TYPE:RPC RECV		DEBUG		
+14:29:09.856958		AUTHOR:reservation_service		TOPIC:Record added to tablereservations, publishing update event		TYPE:EB CALL		DEBUG		
+14:29:09.857959		AUTHOR:reservation_service		TOPIC:Adding record to table reservations		TYPE:RPC RECV		DEBUG		
+14:29:09.859959		AUTHOR:notification_service		TOPIC:Table reservations updated with CREATE.		TYPE:EB RECV		DEBUG		CONTENT:Event data:{'email': 'robert@gmail.com', 'restaurant_id': 1, 'date': datetime.date(2020, 6, 8), 'time': 'breakfast', '_id': 12}
+14:29:09.859959		AUTHOR:notification_service		TOPIC:Adding record to table reservations		TYPE:RPC RECV		DEBUG		
+14:29:09.859959		AUTHOR:reservation_service		TOPIC:Record added to tablereservations, publishing update event		TYPE:EB CALL		DEBUG		
+14:29:09.860960		AUTHOR:reservation_service		TOPIC:Adding record to table reservations		TYPE:RPC RECV		DEBUG		
+14:29:09.862960		AUTHOR:notification_service		TOPIC:Table reservations updated with CREATE.		TYPE:EB RECV		DEBUG		CONTENT:Event data:{'email': 'justyna@gmail.com', 'restaurant_id': 2, 'date': datetime.date(2020, 6, 8), 'time': 'breakfast', '_id': 13}
+14:29:09.862960		AUTHOR:reservation_service		TOPIC:Record added to tablereservations, publishing update event		TYPE:EB CALL		DEBUG		
+14:29:09.863962		AUTHOR:reservation_service		TOPIC:Adding record to table reservations		TYPE:RPC RECV		DEBUG		
+14:29:09.863962		AUTHOR:notification_service		TOPIC:Adding record to table reservations		TYPE:RPC RECV		DEBUG		
+14:29:09.865960		AUTHOR:notification_service		TOPIC:Table reservations updated with CREATE.		TYPE:EB RECV		DEBUG		CONTENT:Event data:{'email': 'anton@gmail.com', 'restaurant_id': 3, 'date': datetime.date(2020, 6, 8), 'time': 'breakfast', '_id': 14}
+14:29:09.866962		AUTHOR:notification_service		TOPIC:Adding record to table reservations		TYPE:RPC RECV		DEBUG		
+14:29:09.865960		AUTHOR:reservation_service		TOPIC:Record added to tablereservations, publishing update event		TYPE:EB CALL		DEBUG		
+14:29:09.866962		AUTHOR:reservation_service		TOPIC:Adding record to table reservations		TYPE:RPC RECV		DEBUG		
+14:29:09.869961		AUTHOR:reservation_service		TOPIC:Record added to tablereservations, publishing update event		TYPE:EB CALL		DEBUG		
+14:29:09.869961		AUTHOR:reservation_service		TOPIC:create reservation function called		TYPE:log		DEBUG		
+14:29:09.869961		AUTHOR:reservation_service		TOPIC:Adding record to table reservations		TYPE:RPC RECV		DEBUG		
+14:29:09.869961		AUTHOR:notification_service		TOPIC:Table reservations updated with CREATE.		TYPE:EB RECV		DEBUG		CONTENT:Event data:{'email': 'khanh@gmail.com', 'restaurant_id': 0, 'date': datetime.date(2020, 6, 8), 'time': 'breakfast', '_id': 15}
+14:29:09.869961		AUTHOR:notification_service		TOPIC:Adding record to table reservations		TYPE:RPC RECV		DEBUG		
+14:29:09.872963		AUTHOR:reservation_service		TOPIC:Record added to tablereservations, publishing update event		TYPE:EB CALL		DEBUG		
+14:29:09.872963		AUTHOR:notification_service		TOPIC:Table reservations updated with CREATE.		TYPE:EB RECV		DEBUG		CONTENT:Event data:{'email': 'pawel@gmail.com', 'restaurant_id': 1, 'date': datetime.date(2020, 6, 8), 'time': 'breakfast', '_id': 16}
+14:29:09.872963		AUTHOR:notification_service		TOPIC:Adding record to table reservations		TYPE:RPC RECV		DEBUG		
+14:29:09.875963		AUTHOR:notification_service		TOPIC:Table reservations updated with CREATE.		TYPE:EB RECV		DEBUG		CONTENT:Event data:{'restaurant_id': 0, 'email': 'new_email@gmail.com', 'date': datetime.date(2020, 6, 8), 'time': 'dinner', '_id': 17}
+14:29:09.876963		AUTHOR:notification_service		TOPIC:Adding record to table reservations		TYPE:RPC RECV		DEBUG		
+15:36:51.926620		AUTHOR:notification_service		TOPIC:Table reservations updated with CLEAR.		TYPE:EB RCV		DEBUG		CONTENT:Event data:{}
+15:36:57.275523		AUTHOR:reservation_service		TOPIC:Table tables updated with CLEAR.		TYPE:EB RCV		DEBUG		CONTENT:Event data:{}
+15:36:57.279526		AUTHOR:notification_service		TOPIC:Table restaurants updated with CLEAR.		TYPE:EB RCV		DEBUG		CONTENT:Event data:{}
+15:36:57.279526		AUTHOR:reservation_service		TOPIC:Table restaurants updated with CLEAR.		TYPE:EB RCV		DEBUG		CONTENT:Event data:{}
+15:37:06.211065		AUTHOR:restaurant_service		TOPIC:create restaurant function called		TYPE:RPC RECV		DEBUG		
+15:37:06.212065		AUTHOR:restaurant_service		TOPIC:Adding record to table reservations		TYPE:log		DEBUG		
+15:38:25.106005		AUTHOR:reservation_service		TOPIC:Table tables updated with CLEAR.		TYPE:EB RCV		DEBUG		CONTENT:Event data:{}
+15:38:25.109006		AUTHOR:reservation_service		TOPIC:Table restaurants updated with CLEAR.		TYPE:EB RCV		DEBUG		CONTENT:Event data:{}
+15:38:25.109006		AUTHOR:notification_service		TOPIC:Table restaurants updated with CLEAR.		TYPE:EB RCV		DEBUG		CONTENT:Event data:{}
+15:38:31.990651		AUTHOR:restaurant_service		TOPIC:create restaurant function called		TYPE:RPC RECV		DEBUG		
+15:38:31.990651		AUTHOR:restaurant_service		TOPIC:Adding record to table restaurants		TYPE:log		DEBUG		
+15:38:31.996653		AUTHOR:restaurant_service		TOPIC:Record added to tablerestaurants, publishing update event		TYPE:EB CALL		DEBUG		
+15:38:31.997663		AUTHOR:notification_service		TOPIC:Table restaurants updated with CREATE.		TYPE:EB RCV		DEBUG		CONTENT:Event data:{'_id': {'_id': 0, 'name': 'kfc', 'address': 'kfc street', 'country': None, 'cuisine': None, 'timestep': 30, 'opens': datetime.time(7, 0), 'closes': datetime.time(23, 0), 'rated': None}, 'name': 'kfc', 'address': 'kfc street', 'opens': datetime.time(7, 0), 'closes': datetime.time(23, 0), 'timestep': 30}
+15:38:31.997663		AUTHOR:reservation_service		TOPIC:Table restaurants updated with CREATE.		TYPE:EB RCV		DEBUG		CONTENT:Event data:{'_id': {'_id': 0, 'name': 'kfc', 'address': 'kfc street', 'country': None, 'cuisine': None, 'timestep': 30, 'opens': datetime.time(7, 0), 'closes': datetime.time(23, 0), 'rated': None}, 'name': 'kfc', 'address': 'kfc street', 'opens': datetime.time(7, 0), 'closes': datetime.time(23, 0), 'timestep': 30}
+15:38:31.997663		AUTHOR:notification_service		TOPIC:Adding record to table restaurants		TYPE:log		DEBUG		
+15:38:31.997663		AUTHOR:reservation_service		TOPIC:Adding record to table restaurants		TYPE:log		DEBUG		
+15:38:32.012657		AUTHOR:restaurant_service		TOPIC:create restaurant function called		TYPE:RPC RECV		DEBUG		
+15:38:32.012657		AUTHOR:restaurant_service		TOPIC:Adding record to table restaurants		TYPE:log		DEBUG		
+15:38:32.015667		AUTHOR:restaurant_service		TOPIC:Record added to tablerestaurants, publishing update event		TYPE:EB CALL		DEBUG		
+15:38:32.020658		AUTHOR:restaurant_service		TOPIC:create restaurant function called		TYPE:RPC RECV		DEBUG		
+15:38:32.020658		AUTHOR:restaurant_service		TOPIC:Adding record to table restaurants		TYPE:log		DEBUG		
+15:38:32.023669		AUTHOR:restaurant_service		TOPIC:Record added to tablerestaurants, publishing update event		TYPE:EB CALL		DEBUG		
+15:38:32.027670		AUTHOR:restaurant_service		TOPIC:create restaurant function called		TYPE:RPC RECV		DEBUG		
+15:38:32.028660		AUTHOR:restaurant_service		TOPIC:Adding record to table restaurants		TYPE:log		DEBUG		
+15:38:32.031671		AUTHOR:restaurant_service		TOPIC:Record added to tablerestaurants, publishing update event		TYPE:EB CALL		DEBUG		
+15:38:32.035662		AUTHOR:restaurant_service		TOPIC:create restaurant function called		TYPE:RPC RECV		DEBUG		
+15:38:32.035662		AUTHOR:restaurant_service		TOPIC:Adding record to table tables		TYPE:log		DEBUG		
+15:38:32.039663		AUTHOR:restaurant_service		TOPIC:Record added to tabletables, publishing update event		TYPE:EB CALL		DEBUG		
+15:38:32.043673		AUTHOR:restaurant_service		TOPIC:create restaurant function called		TYPE:RPC RECV		DEBUG		
+15:38:32.043673		AUTHOR:restaurant_service		TOPIC:Adding record to table tables		TYPE:log		DEBUG		
+15:38:32.046674		AUTHOR:restaurant_service		TOPIC:Record added to tabletables, publishing update event		TYPE:EB CALL		DEBUG		
+15:38:32.050675		AUTHOR:restaurant_service		TOPIC:create restaurant function called		TYPE:RPC RECV		DEBUG		
+15:38:32.051665		AUTHOR:restaurant_service		TOPIC:Adding record to table tables		TYPE:log		DEBUG		
+15:38:32.054676		AUTHOR:restaurant_service		TOPIC:Record added to tabletables, publishing update event		TYPE:EB CALL		DEBUG		
+15:38:32.058666		AUTHOR:restaurant_service		TOPIC:create restaurant function called		TYPE:RPC RECV		DEBUG		
+15:38:32.058666		AUTHOR:restaurant_service		TOPIC:Adding record to table tables		TYPE:log		DEBUG		
+15:38:32.061667		AUTHOR:restaurant_service		TOPIC:Record added to tabletables, publishing update event		TYPE:EB CALL		DEBUG		
+15:38:32.066669		AUTHOR:restaurant_service		TOPIC:create restaurant function called		TYPE:RPC RECV		DEBUG		
+15:38:32.066669		AUTHOR:restaurant_service		TOPIC:Adding record to table tables		TYPE:log		DEBUG		
+15:38:32.070670		AUTHOR:restaurant_service		TOPIC:Record added to tabletables, publishing update event		TYPE:EB CALL		DEBUG		
+15:38:32.074670		AUTHOR:restaurant_service		TOPIC:create restaurant function called		TYPE:RPC RECV		DEBUG		
+15:38:32.074670		AUTHOR:restaurant_service		TOPIC:Adding record to table tables		TYPE:log		DEBUG		
+15:38:32.078682		AUTHOR:restaurant_service		TOPIC:Record added to tabletables, publishing update event		TYPE:EB CALL		DEBUG		
+15:38:32.082672		AUTHOR:restaurant_service		TOPIC:create restaurant function called		TYPE:RPC RECV		DEBUG		
+15:38:32.082672		AUTHOR:restaurant_service		TOPIC:Adding record to table tables		TYPE:log		DEBUG		
+15:38:32.086675		AUTHOR:restaurant_service		TOPIC:Record added to tabletables, publishing update event		TYPE:EB CALL		DEBUG		
+15:38:32.090675		AUTHOR:restaurant_service		TOPIC:create restaurant function called		TYPE:RPC RECV		DEBUG		
+15:38:32.091674		AUTHOR:restaurant_service		TOPIC:Adding record to table tables		TYPE:log		DEBUG		
+15:38:32.094686		AUTHOR:restaurant_service		TOPIC:Record added to tabletables, publishing update event		TYPE:EB CALL		DEBUG		
+15:38:32.098676		AUTHOR:restaurant_service		TOPIC:create restaurant function called		TYPE:RPC RECV		DEBUG		
+15:38:32.099677		AUTHOR:restaurant_service		TOPIC:Adding record to table tables		TYPE:log		DEBUG		
+15:38:32.102678		AUTHOR:restaurant_service		TOPIC:Record added to tabletables, publishing update event		TYPE:EB CALL		DEBUG		
+15:38:32.107677		AUTHOR:restaurant_service		TOPIC:create restaurant function called		TYPE:RPC RECV		DEBUG		
+15:38:32.107677		AUTHOR:restaurant_service		TOPIC:Adding record to table tables		TYPE:log		DEBUG		
+15:38:32.111679		AUTHOR:restaurant_service		TOPIC:Record added to tabletables, publishing update event		TYPE:EB CALL		DEBUG		
+15:38:32.116680		AUTHOR:restaurant_service		TOPIC:create restaurant function called		TYPE:RPC RECV		DEBUG		
+15:38:32.117679		AUTHOR:restaurant_service		TOPIC:Adding record to table tables		TYPE:log		DEBUG		
+15:38:32.121681		AUTHOR:restaurant_service		TOPIC:Record added to tabletables, publishing update event		TYPE:EB CALL		DEBUG		
+15:38:32.126682		AUTHOR:restaurant_service		TOPIC:create restaurant function called		TYPE:RPC RECV		DEBUG		
+15:38:32.127682		AUTHOR:restaurant_service		TOPIC:Adding record to table tables		TYPE:log		DEBUG		
+15:38:32.130693		AUTHOR:restaurant_service		TOPIC:Record added to tabletables, publishing update event		TYPE:EB CALL		DEBUG		
+15:38:32.134683		AUTHOR:restaurant_service		TOPIC:create restaurant function called		TYPE:RPC RECV		DEBUG		
+15:38:32.134683		AUTHOR:restaurant_service		TOPIC:Adding record to table tables		TYPE:log		DEBUG		
+15:38:32.137684		AUTHOR:restaurant_service		TOPIC:Record added to tabletables, publishing update event		TYPE:EB CALL		DEBUG		
+15:38:32.141685		AUTHOR:restaurant_service		TOPIC:create restaurant function called		TYPE:RPC RECV		DEBUG		
+15:38:32.141685		AUTHOR:restaurant_service		TOPIC:Adding record to table tables		TYPE:log		DEBUG		
+15:38:32.144696		AUTHOR:restaurant_service		TOPIC:Record added to tabletables, publishing update event		TYPE:EB CALL		DEBUG		
+15:38:32.149687		AUTHOR:restaurant_service		TOPIC:create restaurant function called		TYPE:RPC RECV		DEBUG		
+15:38:32.149687		AUTHOR:restaurant_service		TOPIC:Adding record to table tables		TYPE:log		DEBUG		
+15:38:32.152698		AUTHOR:restaurant_service		TOPIC:Record added to tabletables, publishing update event		TYPE:EB CALL		DEBUG		
+15:38:32.156699		AUTHOR:restaurant_service		TOPIC:create restaurant function called		TYPE:RPC RECV		DEBUG		
+15:38:32.156699		AUTHOR:restaurant_service		TOPIC:Adding record to table tables		TYPE:log		DEBUG		
+15:38:32.159699		AUTHOR:restaurant_service		TOPIC:Record added to tabletables, publishing update event		TYPE:EB CALL		DEBUG		
+15:38:32.163700		AUTHOR:restaurant_service		TOPIC:create restaurant function called		TYPE:RPC RECV		DEBUG		
+15:38:32.163700		AUTHOR:restaurant_service		TOPIC:Adding record to table tables		TYPE:log		DEBUG		
+15:38:32.166692		AUTHOR:restaurant_service		TOPIC:Record added to tabletables, publishing update event		TYPE:EB CALL		DEBUG		
+15:38:32.170692		AUTHOR:restaurant_service		TOPIC:create restaurant function called		TYPE:RPC RECV		DEBUG		
+15:38:32.171702		AUTHOR:restaurant_service		TOPIC:Adding record to table tables		TYPE:log		DEBUG		
+15:38:32.174703		AUTHOR:restaurant_service		TOPIC:Record added to tabletables, publishing update event		TYPE:EB CALL		DEBUG		
+15:38:32.178693		AUTHOR:restaurant_service		TOPIC:create restaurant function called		TYPE:RPC RECV		DEBUG		
+15:38:32.178693		AUTHOR:restaurant_service		TOPIC:Adding record to table tables		TYPE:log		DEBUG		
+15:38:32.181704		AUTHOR:restaurant_service		TOPIC:Record added to tabletables, publishing update event		TYPE:EB CALL		DEBUG		
+15:38:32.185695		AUTHOR:restaurant_service		TOPIC:create restaurant function called		TYPE:RPC RECV		DEBUG		
+15:38:32.185695		AUTHOR:restaurant_service		TOPIC:Adding record to table tables		TYPE:log		DEBUG		
+15:38:32.188706		AUTHOR:restaurant_service		TOPIC:Record added to tabletables, publishing update event		TYPE:EB CALL		DEBUG		
+15:38:32.192696		AUTHOR:restaurant_service		TOPIC:create restaurant function called		TYPE:RPC RECV		DEBUG		
+15:38:32.192696		AUTHOR:restaurant_service		TOPIC:Adding record to table tables		TYPE:log		DEBUG		
+15:38:32.195697		AUTHOR:restaurant_service		TOPIC:Record added to tabletables, publishing update event		TYPE:EB CALL		DEBUG		
+15:38:32.204710		AUTHOR:restaurant_service		TOPIC:create restaurant function called		TYPE:RPC RECV		DEBUG		
+15:38:32.204710		AUTHOR:restaurant_service		TOPIC:Adding record to table tables		TYPE:log		DEBUG		
+15:38:32.208700		AUTHOR:restaurant_service		TOPIC:Record added to tabletables, publishing update event		TYPE:EB CALL		DEBUG		
+15:38:32.212701		AUTHOR:restaurant_service		TOPIC:create restaurant function called		TYPE:RPC RECV		DEBUG		
+15:38:32.212701		AUTHOR:restaurant_service		TOPIC:Adding record to table tables		TYPE:log		DEBUG		
+15:38:32.215712		AUTHOR:restaurant_service		TOPIC:Record added to tabletables, publishing update event		TYPE:EB CALL		DEBUG		
+15:38:32.219713		AUTHOR:restaurant_service		TOPIC:create restaurant function called		TYPE:RPC RECV		DEBUG		
+15:38:32.219713		AUTHOR:restaurant_service		TOPIC:Adding record to table tables		TYPE:log		DEBUG		
+15:38:32.222713		AUTHOR:restaurant_service		TOPIC:Record added to tabletables, publishing update event		TYPE:EB CALL		DEBUG		
+15:38:32.226704		AUTHOR:restaurant_service		TOPIC:create restaurant function called		TYPE:RPC RECV		DEBUG		
+15:38:32.226704		AUTHOR:restaurant_service		TOPIC:Adding record to table tables		TYPE:log		DEBUG		
+15:38:32.229705		AUTHOR:restaurant_service		TOPIC:Record added to tabletables, publishing update event		TYPE:EB CALL		DEBUG		
+15:38:32.233706		AUTHOR:restaurant_service		TOPIC:create restaurant function called		TYPE:RPC RECV		DEBUG		
+15:38:32.233706		AUTHOR:restaurant_service		TOPIC:Adding record to table tables		TYPE:log		DEBUG		
+15:38:32.236717		AUTHOR:restaurant_service		TOPIC:Record added to tabletables, publishing update event		TYPE:EB CALL		DEBUG		
+15:38:32.240708		AUTHOR:restaurant_service		TOPIC:create restaurant function called		TYPE:RPC RECV		DEBUG		
+15:38:32.240708		AUTHOR:restaurant_service		TOPIC:Adding record to table tables		TYPE:log		DEBUG		
+15:38:32.243718		AUTHOR:restaurant_service		TOPIC:Record added to tabletables, publishing update event		TYPE:EB CALL		DEBUG		
+15:38:32.246719		AUTHOR:restaurant_service		TOPIC:create restaurant function called		TYPE:RPC RECV		DEBUG		
+15:38:32.247709		AUTHOR:restaurant_service		TOPIC:Adding record to table tables		TYPE:log		DEBUG		
+15:38:32.250710		AUTHOR:restaurant_service		TOPIC:Record added to tabletables, publishing update event		TYPE:EB CALL		DEBUG		
+15:38:32.253720		AUTHOR:restaurant_service		TOPIC:create restaurant function called		TYPE:RPC RECV		DEBUG		
+15:38:32.254710		AUTHOR:restaurant_service		TOPIC:Adding record to table tables		TYPE:log		DEBUG		
+15:38:32.256755		AUTHOR:restaurant_service		TOPIC:Record added to tabletables, publishing update event		TYPE:EB CALL		DEBUG		
+15:38:32.260722		AUTHOR:restaurant_service		TOPIC:create restaurant function called		TYPE:RPC RECV		DEBUG		
+15:38:32.260722		AUTHOR:restaurant_service		TOPIC:Adding record to table tables		TYPE:log		DEBUG		
+15:38:32.263723		AUTHOR:restaurant_service		TOPIC:Record added to tabletables, publishing update event		TYPE:EB CALL		DEBUG		
+15:38:32.267713		AUTHOR:restaurant_service		TOPIC:create restaurant function called		TYPE:RPC RECV		DEBUG		
+15:38:32.267713		AUTHOR:restaurant_service		TOPIC:Adding record to table tables		TYPE:log		DEBUG		
+15:38:32.270724		AUTHOR:restaurant_service		TOPIC:Record added to tabletables, publishing update event		TYPE:EB CALL		DEBUG		
+15:38:32.274715		AUTHOR:restaurant_service		TOPIC:create restaurant function called		TYPE:RPC RECV		DEBUG		
+15:38:32.274715		AUTHOR:restaurant_service		TOPIC:Adding record to table tables		TYPE:log		DEBUG		
+15:38:32.277716		AUTHOR:restaurant_service		TOPIC:Record added to tabletables, publishing update event		TYPE:EB CALL		DEBUG		
