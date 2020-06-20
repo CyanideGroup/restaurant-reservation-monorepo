@@ -31,8 +31,10 @@ class Service:
             self.owned_tables = []
 
         # Opening connection with RabbotMQ for events handling
+        self.url = url
         connection = pika.BlockingConnection(pika.ConnectionParameters(host=url))
         self.channel = connection.channel()
+        self.rpc_channel = None
         self.console_debug = console_debug
         # Subscribig to events that concern tables that are not owned by this
         # service. Assuming that only an owner can edit a table and there is
@@ -54,6 +56,8 @@ class Service:
         # initiating log exchange in case it does not yet exist
         self.channel.exchange_declare(exchange='log',
                                       exchange_type='fanout')
+        t = threading.Thread(target=self.start_rpc_server, daemon=True)
+        t.start()
 
     def register_task(self, method, method_name):
         """Registers a task taht can be executed via RPC (this service is a
@@ -109,14 +113,16 @@ class Service:
         self.channel.basic_consume(queue=queue.method.queue, auto_ack=True,
                                    on_message_callback=callback)
 
-    def log(self, topic, content=None, type='log', debug=True, author=None):
+    def log(self, topic, content=None, type='log', debug=True, author=None, channel=None):
+        if channel is None:
+            channel = self.rpc_channel
         if author is None:
             author = self.service_name
         msg = logging_service.log_message.LogMessage(author=author, topic=topic, content=content, type=type, debug=debug)
         if self.console_debug:
             print(str(msg))
-        self.channel.basic_publish(exchange='log', routing_key='',
-                                   body=str(msg))
+        # channel.basic_publish(exchange='log', routing_key='',
+        #                            body=str(msg))
 
     def create_record(self, table_name, data, force=False):
         """Adds a record to a table
@@ -131,7 +137,7 @@ class Service:
         allows for initiating the database in debug stage
         :return:
         """
-        self.log(f'Adding record to table {table_name}')
+        self.log(f'Adding record to table {table_name}', channel=self.rpc_channel if not force else self.channel)
         if not force and table_name not in self.owned_tables:
             raise ValueError(f'This service cant directly modify table'
                              f'{table_name} because it does not own the table.'
@@ -144,7 +150,7 @@ class Service:
                 # inform other microservices of new record
                 data['method'] = 'create'
                 # data['_id']=id
-                self.channel.basic_publish(exchange=table_name, routing_key='',
+                self.rpc_channel.basic_publish(exchange=table_name, routing_key='',
                                            body=str(data))
                 self.log(f'Record added to table {table_name}, publishing update event', type='EB CALL')
         else:
@@ -161,7 +167,7 @@ class Service:
             updated = self.db_con.update(table_name, data)
             if updated:
                 data['method'] = 'update'
-                self.channel.basic_publish(exchange=table_name, routing_key='',
+                self.rpc_channel.basic_publish(exchange=table_name, routing_key='',
                                            body=str(data))
         else:
             updated = self.db_con.update(table_name, data)
@@ -176,7 +182,7 @@ class Service:
             deleted = self.db_con.delete(table_name, data)
             if deleted:
                 data['method'] = 'delete'
-                self.channel.basic_publish(exchange=table_name, routing_key='',
+                self.rpc_channel.basic_publish(exchange=table_name, routing_key='',
                                            body=str(data))
         else:
             deleted = self.db_con.delete(table_name, data)
@@ -204,9 +210,12 @@ class Service:
         for row in data:
             self.create_record(table_name, row, force)
 
+    def start_rpc_server(self):
+        connection = pika.BlockingConnection(pika.ConnectionParameters(host=self.url))
+        self.rpc_channel = connection.channel()
+        self.server.start()
+
     def run(self):
         """starts RPC server in a separate thread and starts listening to events
         """
-        t = threading.Thread(target=self.server.start, daemon=True)
-        t.start()
         self.channel.start_consuming()

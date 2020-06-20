@@ -4,7 +4,7 @@ import datetime
 from flask import Flask, request, redirect, url_for, jsonify
 from flask_cors import CORS
 import time
-from backend.database_init import get_init_data
+from database_init import get_init_data
 from oauthlib.oauth2 import WebApplicationClient
 import os
 import requests
@@ -20,7 +20,12 @@ from user import User
 
 app = Flask(__name__)
 CORS(app)
-app.secret_key = os.environ.get("GOOGLE_CLIENT_SECRET") or os.urandom(24)
+
+CREDENTIALS_FILENAME = 'app_credentials.txt'
+f = open(CREDENTIALS_FILENAME)
+GOOGLE_CLIENT_ID = f.readline().strip()
+GOOGLE_CLIENT_SECRET = f.readline().strip()
+app.secret_key = GOOGLE_CLIENT_SECRET
 login_manager = LoginManager()
 login_manager.init_app(app)
 notification_service = callme.Proxy(server_id='notification_service', amqp_host='localhost')
@@ -28,8 +33,7 @@ reservation_service = callme.Proxy(server_id='reservation_service', amqp_host='l
 search_service = callme.Proxy(server_id='search_service', amqp_host='localhost')
 restaurant_service = callme.Proxy(server_id='restaurant_service', amqp_host='localhost')
 
-GOOGLE_CLIENT_ID = os.environ.get("GOOGLE_CLIENT_ID", None)
-GOOGLE_CLIENT_SECRET = os.environ.get("GOOGLE_CLIENT_SECRET", None)
+
 GOOGLE_DISCOVERY_URL = (
     "https://accounts.google.com/.well-known/openid-configuration"
 )
@@ -201,7 +205,7 @@ def callback():
     return jsonify(response)
 
 if __name__ == '__main__':
-    test = False
+    test = True
     if test:
         restaurants_data, tables_data, reservations_data = get_init_data()
         # Populating data

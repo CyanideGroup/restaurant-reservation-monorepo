@@ -13,7 +13,8 @@ from sqlalchemy.ext.declarative import declarative_base
 import sqlalchemy
 import datetime
 import service
-from backend.database_init import get_init_data
+from database_init import get_init_data
+import time
 
 class RestaurantService(service.Service):
     def __init__(self, name='restaurant_service', use_mock_database=False):
@@ -72,12 +73,12 @@ class RestaurantService(service.Service):
         self.register_task(self.get_reservations_by_restaurant_id, 'get_reservations')
 
     def create_restaurant(self, data):
-        self.log('create restaurant function called', type='RPC RECV')
+        self.log('create restaurant function called', type='RPC RECV', channel=self.rpc_channel)
         created, data = self.create_record('restaurants', data)
         return created, data
 
     def create_table(self, data):
-        self.log('create table function called', type='RPC RECV')
+        self.log('create table function called', type='RPC RECV', channel=self.rpc_channel)
         created, data = self.create_record('tables', data)
         return created, data
 
@@ -103,20 +104,20 @@ class RestaurantService(service.Service):
 if __name__ == '__main__':
     # creating the service instance
     service = RestaurantService(use_mock_database=False)
-
+    time.sleep(1)
     # dropping tables for reinitialisation
     # service.drop_table('reservations')
     # service.drop_table('tables')
     # service.drop_table('restaurants')
 
     # force-cleaning
-    # service.clear_table('reservations', force=True)
-    # service.clear_table('tables', force=True)
-    # service.clear_table('restaurants', force=True)
+    service.clear_table('reservations', force=True)
+    service.clear_table('tables', force=True)
+    service.clear_table('restaurants', force=True)
 
 
     # Initiating tables
-    # restaurants_data, tables_data, reservations_data = get_init_data()
+    restaurants_data, tables_data, reservations_data = get_init_data()
     # service.init_table('restaurants', restaurants_data)
     # service.init_table('tables', tables_data)
     # service.init_table('reservations', reservations_data, force=True)
