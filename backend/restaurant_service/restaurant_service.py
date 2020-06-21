@@ -15,6 +15,7 @@ import datetime
 import service
 from database_init import get_init_data
 import time
+from _collections import OrderedDict
 
 class RestaurantService(service.Service):
     def __init__(self, name='restaurant_service', use_mock_database=False):
@@ -71,6 +72,7 @@ class RestaurantService(service.Service):
         self.register_task(self.delete_table, 'delete_table')
         self.register_task(self.create_restaurant, 'create_restaurant')
         self.register_task(self.get_reservations_by_restaurant_id, 'get_reservations')
+        self.register_task(self.get_report, 'get_report')
 
     def create_restaurant(self, data):
         self.log('create restaurant function called', type='RPC RECV', channel=self.rpc_channel)
@@ -99,6 +101,36 @@ class RestaurantService(service.Service):
             row['table'] = self.db_con.row2dict(reservation.table)
             data.append(row)
         return data
+
+    def get_report(self, restaurant_id, date=None, days=30):
+        restaurant_info = self.db_con.select('restaurants', filter={'_id': restaurant_id})[0]
+        tables = self.db_con.select('tables', filter={'restaurant_id': restaurant_id}, as_dict=True)
+        opens = restaurant_info['opens']
+        closes = restaurant_info['closes']
+        if date is None:
+            date = datetime.date.today()
+        day = date - datetime.timedelta(days=days)
+        resolution = datetime.timedelta(hours=1)
+        result = {}
+        while day <= date:
+            time = datetime.datetime.combine(day, opens)
+            result[day] = OrderedDict()
+            while time < datetime.datetime.combine(day, closes):
+                result[day][time.time()] = 0
+                time += resolution
+            reservations = self.db_con.select('reservations',
+                                              filter={'table_id': [t['_id'] for t in tables],
+                                                      'date': day})
+            for reservation in reservations:
+                closest = None
+                for hour in result[day].keys():
+                    if hour <=reservation['time']:
+                        closest = hour
+                    else:
+                        break
+                result[day][closest] += reservation['guests']
+            day += datetime.timedelta(days=1)
+        return result
 
 
 if __name__ == '__main__':

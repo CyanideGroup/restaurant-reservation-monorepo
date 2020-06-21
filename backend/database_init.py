@@ -24,7 +24,7 @@ def get_init_data():
     # generating initial reservations data
     reserv_ids = [i for i in range(len(user_names))]
     reservations_data = [
-        {'email': email, 'table_id': table_id, 'date': datetime.date.today(), 'time': datetime.time(11)}
+        {'email': email, 'table_id': table_id, 'date': datetime.date.today(), 'time': datetime.time(11), 'guests': 2}
         for reserv_id, email, table_id in zip(reserv_ids, emails, table_ids)]
 
     return restaurants_data, tables_data, reservations_data

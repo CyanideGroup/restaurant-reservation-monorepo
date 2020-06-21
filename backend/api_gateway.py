@@ -17,6 +17,7 @@ from flask_login import (
     logout_user,
 )
 from user import User
+import google_auth
 
 app = Flask(__name__)
 CORS(app)
@@ -73,6 +74,9 @@ def search_terms(restaurant_id, date, filters=None):
 def get_restaurants_by_owner(owner):
     return restaurant_service.use_server('restaurant_service').get_restaurants({'owner': owner})
 
+def get_report(restaurant_id):
+    return restaurant_service.use_server('restaurant_service').get_report(restaurant_id)
+
 
 def serialize_dict(dict):
     """
@@ -89,7 +93,11 @@ def serialize_dict(dict):
 
 @app.route('/')
 def index():
-    return '<a class="button" href="/login">Google Login</a>'
+    if google_auth.is_logged_in():
+        user_info = google_auth.get_user_info()
+        return '<div>You are currently logged in as ' + user_info['given_name'] + '<div><pre>' + json.dumps(user_info, indent=4) + "</pre>"
+
+    return 'You are not currently logged in.'
 
 @app.route('/reservation', methods=['GET', 'POST'])
 def reservation():
@@ -204,6 +212,23 @@ def callback():
     # return response
     return jsonify(response)
 
+@login_manager.user_loader
+def load_user(user_id):
+    return User.get(user_id)
+
+@app.route("/manager/report")
+def report():
+    req = request
+    user = current_user.id
+    if user is None:
+        return
+    email = user.email
+    restaurant_id = request.args.get('restaurant_id')
+    restaurants = get_restaurants_by_owner(email)
+    if restaurant_id not in [restaurant['_id'] for restaurant in restaurants]:
+        return
+    return get_report(restaurant_id)
+
 if __name__ == '__main__':
     test = True
     if test:
@@ -217,5 +242,5 @@ if __name__ == '__main__':
         time.sleep(0.5)
         for row in reservations_data:
             create_reservation(row)
-
-    app.run(ssl_context="adhoc")
+    report = get_report(0)
+    app.run()
