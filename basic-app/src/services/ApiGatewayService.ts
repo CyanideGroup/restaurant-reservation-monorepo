@@ -58,9 +58,9 @@ const parseDate = (date: Date) => `${date.getFullYear()}.${date.getMonth()}.${da
 const parseSearch = ({date, time, guests, name, address}: Search) => {
   let query = `time=${time}:00&guests=${guests}&date=${parseDate(date)}`;
   if (name)
-    query += `name=${name}`;
+    query += `&name=${name}`;
   if (address)
-    query += `address=${address}`;
+    query += `&address=${address}`;
   return query;
 }
 

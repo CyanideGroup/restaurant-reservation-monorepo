@@ -5,6 +5,9 @@
   height: 100%
   padding: 0px
 
+.credentials
+  margin-top: 100px
+
 .data-input-button-img
   width: 25px
   height: 25px
@@ -35,7 +38,7 @@
   height: 37px
 
 .search-input
-  width: 250px
+  width: 220px
 
 .data-input-input
   font-size: 16px
@@ -56,10 +59,12 @@
 .search-bar
   width: 100%
   display: inline-block
+  height: 25 0px
+  box-shadow: 0px 0px 2px 0.5px rgba(150,150,150,0.54)
 
 .search-bar-content
   display: block
-  padding-top: 50px
+  padding-top: 65px
   margin-bottom: 30px
   margin-right: auto
   margin-left: auto
@@ -73,3 +78,181 @@
 
 .search-bar-button
   height: 39px
+  width: 120px
+
+.restaurant-box
+  width: 650px
+  height: 300px
+  margin-right: auto
+  margin-left: auto
+  // border: 1px solid
+  margin-top: 10px
+  box-shadow: 0px 0px 2px 0.1px rgba(150,150,150,0.54)
+
+.restaurant-box-image-wrapper
+  float: left
+  
+.restaurant-box-info-wrapper
+  float: left
+  width: 350px
+
+.restaurant-box-image
+  float: left
+  width: 250px
+  height: 250px
+  background: black
+  margin-left: 25px
+  margin-top: 25px
+  display: block
+
+.restaurant-box-name
+  font-size: 30px
+  margin: 20px
+
+.restaurant-box-description
+  font-size: 12px
+  margin-left: 10px
+  text-align: justify
+  font-weight: 300
+
+.restaurant-box-subtitle
+  display: inline-block
+
+.restaurant-box-subtitle-element
+  font-size: 15px
+  margin: 20px
+  margin-top: 0px
+  font-weight: lighter
+  float: left
+
+.restaurant-box-button
+  width: 150px
+  height: 40px
+  box-shadow: 0px 0px 2px 0.5px rgba(150,150,150,0.54)
+  margin: 10px
+  float: left
+  font-size: 15px
+
+.restaurant-box-button.more
+  margin-left: 20px
+  font-weight: 200
+
+.restaurant-box-button.reserve
+  background: #17C3B2
+  color: white
+  font-weight: 500
+
+.restaurant-box-button:focus
+  outline: none
+  outline: 1px solid #17C3B2
+  
+.restaurant-box-buttons-wrapper
+  display: inline-block
+
+.content
+  display: inline-block
+  width: 100%
+
+.restaurants-box
+  width: 500px
+  float: left
+
+.basic-button
+  padding: 0px
+  border-radius: 2px
+  border: none
+  background: none
+
+.basic-button:focus
+  outline: none
+  outline: 1px solid #17C3B2
+
+.coloured-button
+  background: #17C3B2
+  color: white
+  font-weight: 500
+  font-size: 15px
+
+.filters-price-button
+  width: 50px
+  height: 25px
+  margin: 5px
+  border: 1px solid #17C3B2
+
+.choosen-price
+  background: #17C3B2
+  color: white
+
+.filters-wrapper
+  float: left
+  margin-top: 10px
+  margin-left: 10px
+  margin-right: 10px
+  border: 1px solid rgba(150,150,150,0.54)
+  height: 100%
+
+.container 
+  display: block
+  position: relative
+  padding-left: 35px
+  margin-bottom: 12px
+  cursor: pointer
+  font-size: 18px
+  -webkit-user-select: none
+  -moz-user-select: none
+  -ms-user-select: none
+  user-select: none
+
+.container input 
+  position: absolute
+  opacity: 0
+  cursor: pointer
+  height: 0
+  width: 0
+
+.checkmark 
+  position: absolute
+  top: 2px
+  left: 10px
+  height: 18px
+  width: 18px
+  background-color: #eee
+
+.container:hover input ~ .checkmark
+  background-color: #17C3B2
+
+.container input:checked ~ .checkmark
+  background-color: #17C3B2
+
+.checkmark:after
+  content: ""
+  position: absolute
+  display: none
+
+.container input:checked ~ .checkmark:after
+  display: block
+
+.container .checkmark:after
+  left: 5px
+  top: 2px
+  width: 5px
+  height: 10px
+  border: solid white
+  border-width: 0 3px 3px 0
+  -webkit-transform: rotate(45deg)
+  -ms-transform: rotate(45deg)
+  transform: rotate(45deg)
+
+.filters-button
+  width: 100px
+  height: 30px
+  margin-right: 40px
+  margin-left: 40px
+  margin-top: 10px
+
+.filters-button-wrapper
+  width: 100%
+  height: 50px
+  margin-right: auto
+  margin-left: auto
+

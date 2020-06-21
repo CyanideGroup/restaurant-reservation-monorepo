@@ -5,9 +5,10 @@ import {MainPage} from './MainPage';
 import { ApiGatewayService } from './services/ApiGatewayService';
 import './styles/main.sass';
 import { PrivateRoute } from './PrivateRoute';
+import { Restaurants } from './Restaurants';
 
 const App = () => {
-  const [apiGatewayService] = useState(new ApiGatewayService('http://localhost:5000'));
+  const [apiGatewayService] = useState(new ApiGatewayService('https://127.0.0.1:5000'));
   const history = useHistory();
   const [isLogged, setIsLogged] = useState(false);
   
