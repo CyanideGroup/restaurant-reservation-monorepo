@@ -9,9 +9,9 @@ import googleapiclient.discovery
 
 ACCESS_TOKEN_URI = 'https://www.googleapis.com/oauth2/v4/token'
 AUTHORIZATION_URL = 'https://accounts.google.com/o/oauth2/v2/auth?access_type=offline&prompt=consent'
-AUTH_REDIRECT_URI = 'http://localhost:5000/google/auth'
+AUTH_REDIRECT_URI = 'http://127.0.0.1:5000/google/auth'
 AUTHORIZATION_SCOPE = 'openid email profile'
-BASE_URI = 'http://localhost:5000'
+BASE_URI = 'http://127.0.0.1:5000'
 CREDENTIALS_FILENAME = 'app_credentials.txt'
 f = open(CREDENTIALS_FILENAME)
 GOOGLE_CLIENT_ID = f.readline().strip()
