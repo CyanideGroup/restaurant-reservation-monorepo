@@ -85,10 +85,6 @@ def index():
     if google_auth.is_logged_in():
         user_info = google_auth.get_user_info()
         response = [serialize_dict(rest) for rest in get_restaurants_by_owner(user_info['email'])]
-        # dict = {}
-        # for values in response:
-        #     dict[values['_id']] = values
-        # return response
         return jsonify(response)
         return '<div>You are currently logged in as ' + user_info['given_name'] + '<div><pre>' + json.dumps(user_info, indent=4) + "</pre>"
 
@@ -128,19 +124,22 @@ def search():
 
 @app.route("/manager/report")
 def report():
-    req = request
-    user = current_user.id
-    if user is None:
+    if not google_auth.is_logged_in():
         return
-    email = user.email
-    restaurant_id = request.args.get('restaurant_id')
-    restaurants = get_restaurants_by_owner(email)
+
+    user_info = google_auth.get_user_info()
+    restaurant_id = int(request.args.get('restaurant_id'))
+    restaurants = get_restaurants_by_owner(user_info['email'])
     if restaurant_id not in [restaurant['_id'] for restaurant in restaurants]:
         return
-    return get_report(restaurant_id)
+    report = get_report(restaurant_id)
+    report = serialize_dict(report)
+    for key, value in report.items():
+        report[key] = serialize_dict(value)
+    return report
 
 if __name__ == '__main__':
-    test = True
+    test = False
     if test:
         restaurants_data, tables_data, reservations_data = get_init_data()
         # Populating data
