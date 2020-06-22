@@ -13,7 +13,7 @@ class Service:
     for calls from API gateway and handles data integration events.
     """
     def __init__(self, service_name, url='localhost', table_names=None,
-                 owned_tables=None, db_connector=None, console_debug=True):
+                 owned_tables=None, db_connector=None, console_debug=True, callables=None):
         """
         :param service_name:
         :param url:
@@ -41,12 +41,17 @@ class Service:
         # only one owner per table, owner does not have to listen to events.
         # Listening would cause the owner to react to events that it has fired
         # itself
+        if callables is None:
+            callables = {}
         if table_names is not None:
             for table_name in table_names:
                 self.channel.exchange_declare(exchange=table_name,
                                               exchange_type='fanout')
                 if table_name not in self.owned_tables:
-                    self._subscribe_to_table(table_name)
+                    if table_name in callables.keys():
+                        self._subscribe_to_table(table_name, callables[table_name])
+                    else:
+                        self._subscribe_to_table(table_name)
 
         # initiate RPC server
         self.server = callme.Server(server_id=service_name, amqp_host=url,
@@ -79,7 +84,7 @@ class Service:
         self.server.register_function(method, method_name)
         self.registered_tasks.append(method_name)
 
-    def _subscribe_to_table(self, table_name):
+    def _subscribe_to_table(self, table_name, callable=None):
         """Subscribes the service to exchange that informs about changes in
         this table. Adjusts the local table according to the update event
         content (create/update/delete/drop).
@@ -118,7 +123,9 @@ class Service:
                     self.delete_record(table_name, data, force=True)
                 if method == 'clear':
                     self.clear_table(table_name, force=True)
-            pass
+            if callable is not None:
+                data['method'] = method
+                callable(data)
 
         self.channel.basic_consume(queue=queue.method.queue, auto_ack=True,
                                    on_message_callback=callback)
