@@ -1,0 +1,7 @@
+flask
+pika
+authlib==0.11
+google-api-python-client
+google-auth
+callme
+Flask-Cors

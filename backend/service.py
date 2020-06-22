@@ -59,6 +59,16 @@ class Service:
         t = threading.Thread(target=self.start_rpc_server, daemon=True)
         t.start()
 
+        #registering tasks for admin interface
+        self.register_task(self.create_record, 'create')
+        self.register_task(self.update_record, 'update')
+        self.register_task(self.delete_record, 'delete')
+        self.register_task(self.clear_table, 'clear')
+        self.register_task(self.select, 'select')
+
+    def select(self, table_name, filter=None, like_filter=None, order_by=None, desc=False):
+        return self.db_con.select(table_name, filter, like_filter, return_attr=None, as_dict=True, order_by=order_by, desc=desc)
+
     def register_task(self, method, method_name):
         """Registers a task taht can be executed via RPC (this service is a
         server that other services can call to execute the function)

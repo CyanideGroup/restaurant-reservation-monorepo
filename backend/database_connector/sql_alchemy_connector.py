@@ -136,7 +136,6 @@ if __name__ == '__main__':
         _id = Column(Integer, primary_key=True)
         name = Column(String)
 
-
     db = SQLAlchemyConnector(metadata_classes=[Restaurant])
     objects = db.select('restaurants', order_by='name', desc=True)
     for restaurant in objects:
