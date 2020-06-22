@@ -14,7 +14,8 @@ import sqlalchemy
 EMAIL_ADDR = 'cyanide_service@wp.pl'
 PASSWORD = 'password'
 
-DB_ADDRESS = '192.168.0.88'
+DB_ADDRESS = '172.17.0.1'
+RABBITMQ_URL = '172.17.0.1'
 PORT = 5435
 
 class NotificationService(service.Service):
@@ -24,7 +25,8 @@ class NotificationService(service.Service):
         :param name:
         :param use_mock_database:
         """
-        super().__init__(name, table_names=['reservations', 'restaurants', 'tables'], callables={'reservations': self.reservation_confirmation})
+        super().__init__(name, table_names=['reservations', 'restaurants', 'tables'],
+                         callables={'reservations': self.reservation_confirmation}, url=RABBITMQ_URL)
         if use_mock_database:
             self.db_con = db_connector.DBConnectorMock()
         else:

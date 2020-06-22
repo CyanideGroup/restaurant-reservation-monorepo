@@ -14,13 +14,14 @@ import database_connector.db_connector
 import service
 import sqlalchemy
 
-DB_ADDRESS = '192.168.0.88'
+DB_ADDRESS = '172.17.0.1'
+RABBITMQ_URL = '172.17.0.1'
 PORT = 5433
 
 class ReservationService(service.Service):
     def __init__(self, name='reservation_service', use_mock_database=False):
         super().__init__(name, table_names=['restaurants', 'reservations', 'tables'],
-                         owned_tables=['reservations'])
+                         owned_tables=['reservations'], url=RABBITMQ_URL)
         if use_mock_database:
             self.db_con = database_connector.db_connector.DBConnectorMock()
         else:
