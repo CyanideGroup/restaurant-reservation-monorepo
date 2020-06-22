@@ -104,12 +104,10 @@ def reservation():
     days = request.args.get('days')
     if days is None:
         days = 30
-    result = search_terms(restaurant_id, date)
-
-    dict = {}
-    for key, value in result.items():
-        dict[str(key)] = value
-    return dict
+    result = {}
+    for i in range(days):
+        result[str(datetime.date.today()+datetime.timedelta(days=i))] = serialize_dict(search_terms(restaurant_id, date))
+    return result
 
 @app.route('/search', methods=['GET', 'POST'])
 def search():
