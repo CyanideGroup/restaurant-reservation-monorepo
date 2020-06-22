@@ -25,6 +25,7 @@ f = open(CREDENTIALS_FILENAME)
 GOOGLE_CLIENT_ID = f.readline().strip()
 GOOGLE_CLIENT_SECRET = f.readline().strip()
 app.secret_key = GOOGLE_CLIENT_SECRET
+CORS(app)
 
 app.register_blueprint(google_auth.app)
 notification_service = callme.Proxy(server_id='notification_service', amqp_host='localhost')
@@ -139,7 +140,7 @@ def report():
     return report
 
 if __name__ == '__main__':
-    test = False
+    test = True
     if test:
         restaurants_data, tables_data, reservations_data = get_init_data()
         # Populating data
