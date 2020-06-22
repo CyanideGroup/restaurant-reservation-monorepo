@@ -14,6 +14,9 @@ import sqlalchemy
 EMAIL_ADDR = 'cyanide_service@wp.pl'
 PASSWORD = 'password'
 
+DB_ADDRESS = '192.168.0.88'
+PORT = 5435
+
 class NotificationService(service.Service):
     def __init__(self, name='notification_service', use_mock_database=False):
         """
@@ -54,7 +57,7 @@ class NotificationService(service.Service):
 
             self.db_con = sql_alchemy_connector.\
                 SQLAlchemyConnector([Restaurant, Reservation, Table],
-                                    url="localhost", db_name='postgres',
+                                    url=DB_ADDRESS+':'+str(PORT), db_name='postgres',
                                     username='notification_service', password='password')
             base.metadata.create_all(self.db_con.db)
         self.register_task(self.notify, 'notify')

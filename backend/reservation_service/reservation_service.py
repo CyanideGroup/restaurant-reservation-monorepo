@@ -14,6 +14,9 @@ import database_connector.db_connector
 import service
 import sqlalchemy
 
+DB_ADDRESS = '192.168.0.88'
+PORT = 5433
+
 class ReservationService(service.Service):
     def __init__(self, name='reservation_service', use_mock_database=False):
         super().__init__(name, table_names=['restaurants', 'reservations', 'tables'],
@@ -59,7 +62,7 @@ class ReservationService(service.Service):
 
             # Assigning an SQLAlchemy database connector
             self.db_con = sql_alchemy_connector.SQLAlchemyConnector([Restaurant, Reservation, Table],
-                                                                    url='localhost', db_name='postgres',
+                                                                    url=DB_ADDRESS+':'+str(PORT), db_name='postgres',
                                                                     username='reservation_service', password='password')
 
             # Creating the tables if they do not exist

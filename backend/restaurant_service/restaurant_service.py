@@ -17,6 +17,9 @@ from database_init import get_init_data
 import time
 from _collections import OrderedDict
 
+DB_ADDRESS = '192.168.0.88'
+PORT = 5432
+
 class RestaurantService(service.Service):
     def __init__(self, name='restaurant_service', use_mock_database=False):
         super().__init__(name, table_names=['reservations', 'restaurants', 'tables'], owned_tables=['restaurants', 'tables'])
@@ -70,7 +73,7 @@ class RestaurantService(service.Service):
 
             self.db_con = sql_alchemy_connector.\
                 SQLAlchemyConnector([Restaurant, Reservation, Table],
-                                    url="localhost", db_name='postgres',
+                                    url=DB_ADDRESS+':'+str(PORT), db_name='postgres',
                                     username='restaurant_service', password='password')
             base.metadata.create_all(self.db_con.db)
         self.register_task(self.get_restaurants, 'get_restaurants')
