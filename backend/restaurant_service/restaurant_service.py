@@ -37,6 +37,12 @@ class RestaurantService(service.Service):
                 closes = Column(sqlalchemy.types.Time)
                 rated = Column(Integer)
                 owner = Column(String)
+                price = Column(Integer)
+                img1 = Column(String)
+                img2 = Column(String)
+                img3 = Column(String)
+                description = Column(String)
+
 
             class Table(base):
                 __tablename__ = 'tables'

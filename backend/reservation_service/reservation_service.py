@@ -91,11 +91,12 @@ class ReservationService(service.Service):
         data = {}
         reservation_time = datetime.timedelta(hours=3)
         for time in times:
+            data[time] = []
             for table in tables:
                 is_free = True
                 for reservation in reservations:
-                    if time not in data.keys():
-                        data[time] = []
+                    # if time not in data.keys():
+                    #     data[time] = []
                     res_time = reservation['time']
                     res_datetime = datetime.datetime.combine(date, res_time)
                     if reservation['table_id'] == table['_id'] \

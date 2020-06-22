@@ -33,6 +33,9 @@ class SearchService(service.Service):
                 opens = Column(sqlalchemy.types.Time)
                 closes = Column(sqlalchemy.types.Time)
                 rated = Column(Integer)
+                price = Column(Integer)
+                img1 = Column(String)
+                description = Column(String)
 
             class Table(base):
                 __tablename__ = 'tables'
@@ -102,9 +105,9 @@ if __name__ == '__main__':
     # service.drop_table('restaurants')
 
     # force-cleaning
-    # service.clear_table('reservations', force=True)
-    # service.clear_table('tables', force=True)
-    # service.clear_table('restaurants', force=True)
+    service.clear_table('reservations', force=True)
+    service.clear_table('tables', force=True)
+    service.clear_table('restaurants', force=True)
 
     # Initiating tables
     # service.init_table('restaurants', restaurants_data, force=True)

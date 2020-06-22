@@ -15,7 +15,7 @@ class SQLAlchemyConnector(DBConnector):
         Session = sessionmaker(self.db)
         self.session = Session()
 
-    def select(self, table_name, filter=None, like_filter=None, return_attr=None, as_dict=True):
+    def select(self, table_name, filter=None, like_filter=None, return_attr=None, as_dict=True, order_by=None, desc=False):
         table_class = self.table_data[table_name]
         objects = self.session.query(table_class)
         if filter is not None:
@@ -36,6 +36,11 @@ class SQLAlchemyConnector(DBConnector):
             for key, value in like_filter.items():
                 attribute = getattr(table_class, key)
                 objects = objects.filter(attribute.like(f'%{value}%'))
+        if order_by is not None:
+            if not desc:
+                objects = objects.order_by(getattr(table_class, order_by))
+            else:
+                objects = objects.order_by(getattr(table_class, order_by).desc())
         if as_dict:
             objects = [self.row2dict(obj) for obj in objects]
         return objects
@@ -130,11 +135,10 @@ if __name__ == '__main__':
         __table_args__ = {'schema': 'reservation_microservice'}
         _id = Column(Integer, primary_key=True)
         name = Column(String)
-        address = Column(String)
 
 
     db = SQLAlchemyConnector(metadata_classes=[Restaurant])
-    objects = db.select('restaurants', filter={'name': 'kfc'})
+    objects = db.select('restaurants', order_by='name', desc=True)
     for restaurant in objects:
         print(restaurant)
     pass
