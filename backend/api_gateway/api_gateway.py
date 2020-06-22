@@ -101,7 +101,11 @@ def reservation():
         return f'Reservation ID: {data["id"]}'
     date = datetime.date(*[int(arg) for arg in request.args.get('date').split('.')])
     restaurant_id = request.args.get('restaurant_id')
+    days = request.args.get('days')
+    if days is None:
+        days = 30
     result = search_terms(restaurant_id, date)
+
     dict = {}
     for key, value in result.items():
         dict[str(key)] = value

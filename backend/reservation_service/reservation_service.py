@@ -91,7 +91,7 @@ class ReservationService(service.Service):
         data = {}
         reservation_time = datetime.timedelta(hours=3)
         for time in times:
-            data[time] = []
+            data[time.time()] = []
             for table in tables:
                 is_free = True
                 for reservation in reservations:
@@ -104,7 +104,7 @@ class ReservationService(service.Service):
                         is_free = False
                         break
                 if is_free:
-                    data[time].append(table)
+                    data[time.time()].append(table)
         return data
 
     def create_reservation(self, data):
