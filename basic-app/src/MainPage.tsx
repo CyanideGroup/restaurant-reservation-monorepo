@@ -1,130 +1,135 @@
-import React, { useState, useRef, useEffect, RefObject } from 'react';
+import React, { useState } from 'react';
 import { useHistory } from 'react-router';
-import { formatDateDMY } from './utils/formatDate';
-import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
-const calendarImg = require('./styles/assets/calendar.svg');
-import Select from 'react-select';
 import { Search } from './services/ApiGatewayService';
+import { Restaurants } from './Restaurants';
+import {SearchBar} from './SearchBar';
 
-const getPossibleHours = () => {
-  var arr = [], i, j;
-  for(i=0; i<24; i++) {
-    for(j=0; j<4; j++) {
-      const hour = i + ":" + (j===0 ? "00" : 15*j);
-      arr.push({value: hour, label: hour} );
-    }
-  }
-  return arr;
-}
-
-const getGuestsArray = (number: number) => {
-  let array = [];
-  for(let i = 0; i < number; i++){
-    array.push({value: i+1, label:`${i+1} ${i == 0 ? 'gość' : 'gości'}`});
-  }
-  return array;
-}
+const lelumPolelum = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
 
 export const MainPage = ({setIsLogged, apiGatewayService}: {apiGatewayService: any, setIsLogged: (arg: any) => void} ) => {
   const history = useHistory();
+  const [priceFilters, setPriceFilters] = useState([]);
+  const [cuisineFilters, setCuisineFilters] = useState([]);
+  const result = {
+    0: {
+      _id: 0,
+      closes: '23:00:00',
+      address: 'kfc street',
+      country: null,
+      cuisine: 'amerykańska',
+      name: 'kfc',
+      opens: '07:00:00',
+      rated: null,
+      description: lelumPolelum,
+      pricing: '$',
+      url: 'https://www.scandichotels.com/imagevault/publishedmedia/qn6infvg30381stkubky/scandic-sundsvall-city-restaurant-verket-10.jpg',
+    },
+    1: {
+      _id: 1,
+      closes: '23:00:00',
+      address: 'burgerking street',
+      country: null,
+      cuisine: 'amerykańska',
+      name: 'burgerking',
+      opens: '07:00:00',
+      rated: null,
+      description: lelumPolelum,
+      pricing: '$$',
+      url: 'https://www.scandichotels.com/imagevault/publishedmedia/qn6infvg30381stkubky/scandic-sundsvall-city-restaurant-verket-10.jpg',
+    }
+  }
+  const [restaurants, setRestaurants] = useState(result);
   const onSearch = async (search: Search) => {
     console.log(search);
-    const result = await apiGatewayService.getRestaurants(search);
-    console.log(result);
+    // const result = await apiGatewayService.getRestaurants(search);
+    setRestaurants(result);
   };
 
-  return <div>Main Page
+  return <div>
     <SearchBar onSearch={onSearch}/>
-    <button onClick={() => setIsLogged(true)}>Log in</button>
-    <button onClick={() => history.push('/priv')}>Go to private</button>
-    
+    <div className='content'>
+      <div className='content-wrapper'>
+        <Filters setFinalPriceFilters={setPriceFilters} setFinalCuisineFilters={setCuisineFilters}/>
+        {restaurants && <Restaurants 
+          onReserve={(args?: any[]) => history.push('/reservation', args)}
+          restaurants={restaurants}
+          cuisineFilters={cuisineFilters}
+          priceFilters={priceFilters}
+        />}
+      </div>
+    </div>
   </div>;
 };
 
+const Filters = ({setFinalPriceFilters, setFinalCuisineFilters}: {setFinalCuisineFilters: (args: any[]) => void, setFinalPriceFilters: (args: any[]) => void}) => {
+  const [cuisineFilters, setCuisinneFilters] = useState([]);
+  const [priceFilters, setPriceFilters] = useState([]);
 
-const SearchBar = ({onSearch}: {onSearch: any}) => {
-  const [date, setDate] = useState(new Date());
-  const [guestNumber, setGuestNumber] = useState('1');
-  const [hour, setHour] = useState(date.getHours().toString());
-  const [searchValue, setSearchValue] = useState('');
-  const guestArr = getGuestsArray(9);
-  
-  return <div className='search-bar'>
-    <div className='search-bar-content'>
-      <div className='search-bar-element'>
-        <Select  options={getPossibleHours()} value={{value: hour, label: hour}} onChange={(arg: any) => setHour(arg.value)}/>
-      </div>
-      <div className='search-bar-element'>
-        <Select options={guestArr} value={{value: guestArr[parseInt(guestNumber) - 1].value, label: guestArr[parseInt(guestNumber) - 1].label}} onChange={(arg: any) => setGuestNumber(arg.value)}/>
-      </div>
-      <div className='search-bar-element'>
-        <DateInput date={date} setDate={setDate}/>
-      </div>
-      <div className='search-bar-element'>
-        <SearchInput setSearchValue={setSearchValue}/>
-      </div>
-      <div className='search-bar-element'>
-        <button className='search-bar-button' onClick={() => onSearch({date, time: hour, guests: guestNumber, address: searchValue})}>
-          Wyszukaj
-        </button>
-      </div>
-    </div>
-  </div>
-}
-
-interface SearchInputProps {
-  setSearchValue: (arg: any) => void;
-}
-
-const SearchInput = ({setSearchValue}: SearchInputProps) => {
-  return <div>
-    <input className='basic-input search-input' placeholder='np. Warszawa' onChange={(event) => setSearchValue(event.target.value)}/>
-    </div>
-}
-
-interface DateInputProps {
-  date: Date;
-  setDate: (date: Date) => void;
-}
-
-export const useOutsideClick = (ref: RefObject<HTMLDivElement>, callback: () => void, deps?: any[]) => {
-  const handleClick = (e: MouseEvent) => {
-    if (ref.current && !ref.current.contains(e.target as HTMLInputElement)) {
-      callback();
-    }
-  };
-
-  useEffect(() => {
-    document.addEventListener('mousedown', handleClick);
-
-    return () => {
-      document.removeEventListener('mousedown', handleClick);
-    };
-  }, deps);
-};
-
-const DateInput = ({date, setDate}: DateInputProps) => {
-  const [calendarVisible, setCalendarVisible] = useState(false);
-
-  const changeDate = (date: Date) => {
-    setDate(date);
-    setCalendarVisible(false);
+  const setFinalFilters = () => {
+    setFinalCuisineFilters(cuisineFilters);
+    setFinalPriceFilters(priceFilters);
   }
 
-  const ref = useRef(null);
-  useOutsideClick(ref, () => setCalendarVisible(false));
+  const changePriceFilter = (filter: string) => {
+    if(priceFilters.includes(filter)) {
+      setPriceFilters(priceFilters.filter(element => element != filter));
+    } else {
+      setPriceFilters([...priceFilters, filter]);
+    }
+  }
 
-  return <div>
-    <div className='data-input-wrapper'>
-      <input className='basic-input data-input-input' placeholder={formatDateDMY(date)}></input>
-      <div className='data-input-button-wrapper'>
-        <button className='data-input-button' onClick={() => setCalendarVisible(!calendarVisible)}/>
-        <img className='data-input-button-img' src={calendarImg.default}/>
-      </div>
-    </div>
-    <div ref={ref} className='calendar'>
-      {calendarVisible && <Calendar value={date} onChange={changeDate}/>}
+  const changeCuisineFilter = (filter: string) => {
+    if(cuisineFilters.includes(filter)) {
+      setCuisinneFilters(cuisineFilters.filter(element => element != filter));
+    } else {
+      setCuisinneFilters([...cuisineFilters, filter]);
+    }
+  }
+
+  const cuisines = ['amerykańska', 'włoska'];
+
+  return <div className='filters-wrapper'>
+   <Prices filters={priceFilters} changeFilter={changePriceFilter}/>
+   {cuisines.map(cuisine => 
+    <InputChecked name={cuisine} changeFilter={changeCuisineFilter} />)}
+    <div className='filters-button-wrapper'>
+      <button className='filters-button basic-button coloured-button' onClick={setFinalFilters}>Filtruj</button>
     </div>
   </div>
-};
+}
+
+export const InputChecked = ({name, changeFilter}: {changeFilter: (arg: any) => void, name: string}) => {
+  return <label className="container">{name}
+    <input type="checkbox" onChange={() => changeFilter(name)}/>
+    <span className="checkmark"></span>
+  </label>;
+}
+
+const Prices = ({filters, changeFilter}: {filters: any[], changeFilter: (arg: any) => void}) => {
+  return <div className='filters-prices'>
+  <PriceButton 
+      price='$' 
+      onClick={changeFilter}
+      active={filters.includes('$')}
+    />
+    <PriceButton 
+      price='$$' 
+      onClick={changeFilter}
+      active={filters.includes('$$')}
+    />
+    <PriceButton 
+      price='$$$' 
+      onClick={changeFilter}
+      active={filters.includes('$$$')}
+    />
+  </div>
+}
+
+const PriceButton = ({onClick, price, active}: any) => {
+  return <button 
+    onClick={() => onClick(price)}
+    className={`basic-button filters-price-button ${active && ' choosen-price'}`}>
+      {price}
+  </button>
+}
