@@ -14,9 +14,13 @@ import sqlalchemy
 import datetime
 import service
 
+DB_ADDRESS = '172.17.0.1'
+RABBITMQ_URL = '172.17.0.1'
+PORT = 5434
+
 class SearchService(service.Service):
     def __init__(self, name='search_service', use_mock_database=False):
-        super().__init__(name, table_names=['reservations', 'restaurants', 'tables'])
+        super().__init__(name, table_names=['reservations', 'restaurants', 'tables'], url=RABBITMQ_URL)
         if use_mock_database:
             self.db_con = db_connector.DBConnectorMock()
         else:
@@ -33,6 +37,9 @@ class SearchService(service.Service):
                 opens = Column(sqlalchemy.types.Time)
                 closes = Column(sqlalchemy.types.Time)
                 rated = Column(Integer)
+                price = Column(Integer)
+                img1 = Column(String)
+                description = Column(String)
 
             class Table(base):
                 __tablename__ = 'tables'
@@ -58,7 +65,7 @@ class SearchService(service.Service):
 
             self.db_con = sql_alchemy_connector.\
                 SQLAlchemyConnector([Restaurant, Reservation, Table],
-                                    url="localhost", db_name='postgres',
+                                    url=DB_ADDRESS+':'+str(PORT), db_name='postgres',
                                     username='search_service', password='password')
             base.metadata.create_all(self.db_con.db)
         self.register_task(self.search, 'search')
@@ -102,9 +109,9 @@ if __name__ == '__main__':
     # service.drop_table('restaurants')
 
     # force-cleaning
-    # service.clear_table('reservations', force=True)
-    # service.clear_table('tables', force=True)
-    # service.clear_table('restaurants', force=True)
+    service.clear_table('reservations', force=True)
+    service.clear_table('tables', force=True)
+    service.clear_table('restaurants', force=True)
 
     # Initiating tables
     # service.init_table('restaurants', restaurants_data, force=True)
@@ -112,4 +119,5 @@ if __name__ == '__main__':
     # service.init_table('reservations', reservations_data, force=True)
 
     # service.search(date=datetime.date.today(), guests=1, time=datetime.time(6), restaurant_name='mcd')
+    print('dziala')
     service.run()

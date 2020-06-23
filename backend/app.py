@@ -11,7 +11,7 @@ import googleapiclient.discovery
 import google_auth
 
 app = flask.Flask(__name__)
-CREDENTIALS_FILENAME = 'app_credentials.txt'
+CREDENTIALS_FILENAME = 'api_gateway/app_credentials.txt'
 f = open(CREDENTIALS_FILENAME)
 GOOGLE_CLIENT_ID = f.readline().strip()
 GOOGLE_CLIENT_SECRET = f.readline().strip()

@@ -1,23 +1,23 @@
-import pika
+# import pika
 import callme
 import datetime
 from flask import Flask, request, redirect, url_for, jsonify
 from flask_cors import CORS
 import time
 from database_init import get_init_data
-from oauthlib.oauth2 import WebApplicationClient
-import os
-import requests
+# from oauthlib.oauth2 import WebApplicationClient
+# import os
+# import requests
 import json
-from flask_login import (
-    LoginManager,
-    current_user,
-    login_required,
-    login_user,
-    logout_user,
-)
+# from flask_login import (
+#     LoginManager,
+#     current_user,
+#     login_required,
+#     login_user,
+#     logout_user,
+# )
 import flask
-import google_auth
+# import google_auth
 
 app = flask.Flask(__name__)
 CREDENTIALS_FILENAME = 'app_credentials.txt'
@@ -25,12 +25,15 @@ f = open(CREDENTIALS_FILENAME)
 GOOGLE_CLIENT_ID = f.readline().strip()
 GOOGLE_CLIENT_SECRET = f.readline().strip()
 app.secret_key = GOOGLE_CLIENT_SECRET
+CORS(app)
 
-app.register_blueprint(google_auth.app)
-notification_service = callme.Proxy(server_id='notification_service', amqp_host='localhost')
-reservation_service = callme.Proxy(server_id='reservation_service', amqp_host='localhost')
-search_service = callme.Proxy(server_id='search_service', amqp_host='localhost')
-restaurant_service = callme.Proxy(server_id='restaurant_service', amqp_host='localhost')
+# app.register_blueprint(google_auth.app)
+RPC_ADDRESS = '172.18.0.1'
+
+notification_service = callme.Proxy(server_id='notification_service', amqp_host=RPC_ADDRESS)
+reservation_service = callme.Proxy(server_id='reservation_service', amqp_host=RPC_ADDRESS)
+search_service = callme.Proxy(server_id='search_service', amqp_host=RPC_ADDRESS)
+restaurant_service = callme.Proxy(server_id='restaurant_service', amqp_host=RPC_ADDRESS)
 
 
 def create_restaurant(data):
@@ -82,13 +85,13 @@ def serialize_dict(dict):
 
 @app.route('/')
 def index():
-    if google_auth.is_logged_in():
-        user_info = google_auth.get_user_info()
-        response = [serialize_dict(rest) for rest in get_restaurants_by_owner(user_info['email'])]
-        return jsonify(response)
-        return '<div>You are currently logged in as ' + user_info['given_name'] + '<div><pre>' + json.dumps(user_info, indent=4) + "</pre>"
+    # if google_auth.is_logged_in():
+    #     user_info = google_auth.get_user_info()
+    #     # response = [serialize_dict(rest) for rest in get_restaurants_by_owner(user_info['email'])]
+    #     # return jsonify(response)
+    #     return '<div>You are currently logged in as ' + user_info['given_name'] + '<div><pre>' + json.dumps(user_info, indent=4) + "</pre>"
 
-    return 'You are not currently logged in.'
+    return 'init page'
 
 @app.route('/reservation', methods=['GET', 'POST'])
 def reservation():
@@ -100,11 +103,13 @@ def reservation():
         return f'Reservation ID: {data["id"]}'
     date = datetime.date(*[int(arg) for arg in request.args.get('date').split('.')])
     restaurant_id = request.args.get('restaurant_id')
-    result = search_terms(restaurant_id, date)
-    dict = {}
-    for key, value in result.items():
-        dict[str(key)] = value
-    return dict
+    days = request.args.get('days')
+    if days is None:
+        days = 30
+    result = {}
+    for i in range(days):
+        result[str(datetime.date.today()+datetime.timedelta(days=i))] = serialize_dict(search_terms(restaurant_id, date))
+    return result
 
 @app.route('/search', methods=['GET', 'POST'])
 def search():
@@ -121,13 +126,13 @@ def search():
         return available_restaurants
     return 'nic'
 
-
 @app.route("/manager/report")
 def report():
-    if not google_auth.is_logged_in():
-        return
+    # if not google_auth.is_logged_in():
+    #     return
 
-    user_info = google_auth.get_user_info()
+    # user_info = google_auth.get_user_info()
+    user_info = {'email': 'pawelzakieta97@gmail.com'}
     restaurant_id = int(request.args.get('restaurant_id'))
     restaurants = get_restaurants_by_owner(user_info['email'])
     if restaurant_id not in [restaurant['_id'] for restaurant in restaurants]:
@@ -151,5 +156,5 @@ if __name__ == '__main__':
         time.sleep(0.5)
         for row in reservations_data:
             create_reservation(row)
-    report = get_report(0)
-    app.run()
+    # report = get_report(0)
+    app.run(host='0.0.0.0', port=5000)

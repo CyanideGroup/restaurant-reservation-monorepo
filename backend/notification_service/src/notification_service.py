@@ -2,16 +2,21 @@ import os,sys,inspect
 currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parentdir = os.path.dirname(currentdir)
 sys.path.insert(0,parentdir)
-
+from sqlalchemy.orm import relationship
 from datetime import date
 from database_connector import db_connector, sql_alchemy_connector
 from sqlalchemy import Column, String, Integer, ForeignKey, Date
 from sqlalchemy.ext.declarative import declarative_base
 import datetime
 import service
+import sqlalchemy
 
 EMAIL_ADDR = 'cyanide_service@wp.pl'
 PASSWORD = 'password'
+
+DB_ADDRESS = '172.17.0.1'
+RABBITMQ_URL = '172.17.0.1'
+PORT = 5435
 
 class NotificationService(service.Service):
     def __init__(self, name='notification_service', use_mock_database=False):
@@ -20,7 +25,8 @@ class NotificationService(service.Service):
         :param name:
         :param use_mock_database:
         """
-        super().__init__(name, table_names=['reservations', 'restaurants'])
+        super().__init__(name, table_names=['reservations', 'restaurants', 'tables'],
+                         callables={'reservations': self.reservation_confirmation}, url=RABBITMQ_URL)
         if use_mock_database:
             self.db_con = db_connector.DBConnectorMock()
         else:
@@ -31,6 +37,14 @@ class NotificationService(service.Service):
                 _id = Column(Integer, primary_key=True)
                 name = Column(String)
                 address = Column(String)
+
+            class Table(base):
+                __tablename__ = 'tables'
+                __table_args__ = {'schema': 'notification_microservice'}
+                _id = Column(Integer, primary_key=True)
+                restaurant_id = Column(Integer, ForeignKey(
+                    'notification_microservice.restaurants._id'))
+                restaurant = relationship('Restaurant')
 
             class Reservation(base):
                 __tablename__ = 'reservations'
@@ -43,13 +57,24 @@ class NotificationService(service.Service):
                 time = Column(String)
                 guests = Column(Integer)
 
-
             self.db_con = sql_alchemy_connector.\
-                SQLAlchemyConnector([Restaurant, Reservation],
-                                    url="localhost", db_name='postgres',
+                SQLAlchemyConnector([Restaurant, Reservation, Table],
+                                    url=DB_ADDRESS+':'+str(PORT), db_name='postgres',
                                     username='notification_service', password='password')
             base.metadata.create_all(self.db_con.db)
         self.register_task(self.notify, 'notify')
+
+    def reservation_confirmation(self, data):
+        if 'method' in data.keys() and data['method'].upper() == 'CREATE':
+            table = self.db_con.select('tables', filter={'_id': data['table_id']})[0]
+            restaurant = self.db_con.select('restaurants', filter={'_id': table['restaurant_id']})[0]
+            self.send_email(data['email'], topic='CYANIDE reservation confirmation',
+                            message=f'This is a confirmation of your reservation for restaurant {restaurant["name"]}.\n'
+                                    f'Reservation details:\n'
+                                    f'restaurant: {restaurant["name"]}\n'
+                                    f'address: {restaurant["address"]}\n'
+                                    f'date: {data["date"]}\n'
+                                    f'time: {data["time"]}')
 
     def send_email(self, address, topic, message):
         print()
@@ -103,4 +128,5 @@ if __name__ == '__main__':
     # running the service. If reservation service is run afterwards, all the
     # reservation data added via reservation service will be automatically added
     # to reservations table of this service
+    print('dziala')
     service.run()

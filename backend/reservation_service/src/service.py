@@ -1,3 +1,4 @@
+# coding=utf8
 import threading
 
 # This is necessary even though it says it is not (evaluating date)
@@ -5,7 +6,7 @@ import datetime
 
 import pika
 import callme
-import logging_service.log_message
+import log_message
 
 class Service:
     """
@@ -135,7 +136,7 @@ class Service:
             channel = self.rpc_channel
         if author is None:
             author = self.service_name
-        msg = logging_service.log_message.LogMessage(author=author, topic=topic, content=content, type=type, debug=debug)
+        msg = log_message.LogMessage(author=author, topic=topic, content=content, type=type, debug=debug)
         if self.console_debug:
             print(str(msg))
         # channel.basic_publish(exchange='log', routing_key='',

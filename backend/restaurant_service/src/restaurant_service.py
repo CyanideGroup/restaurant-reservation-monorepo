@@ -1,11 +1,7 @@
+# coding=utf8
 import os,sys,inspect
 
 from sqlalchemy.orm import relationship
-
-currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
-parentdir = os.path.dirname(currentdir)
-sys.path.insert(0,parentdir)
-
 from datetime import date
 from database_connector import db_connector, sql_alchemy_connector
 from sqlalchemy import Column, String, Integer, ForeignKey, Date
@@ -17,9 +13,14 @@ from database_init import get_init_data
 import time
 from _collections import OrderedDict
 
+DB_ADDRESS = '172.17.0.1'
+RABBITMQ_URL = '172.17.0.1'
+PORT = 5432
+
 class RestaurantService(service.Service):
     def __init__(self, name='restaurant_service', use_mock_database=False):
-        super().__init__(name, table_names=['reservations', 'restaurants', 'tables'], owned_tables=['restaurants', 'tables'])
+        super().__init__(name, table_names=['reservations', 'restaurants', 'tables'],
+                         owned_tables=['restaurants', 'tables'], url=RABBITMQ_URL)
         if use_mock_database:
             self.db_con = db_connector.DBConnectorMock()
         else:
@@ -37,6 +38,12 @@ class RestaurantService(service.Service):
                 closes = Column(sqlalchemy.types.Time)
                 rated = Column(Integer)
                 owner = Column(String)
+                price = Column(Integer)
+                img1 = Column(String)
+                img2 = Column(String)
+                img3 = Column(String)
+                description = Column(String)
+
 
             class Table(base):
                 __tablename__ = 'tables'
@@ -64,7 +71,7 @@ class RestaurantService(service.Service):
 
             self.db_con = sql_alchemy_connector.\
                 SQLAlchemyConnector([Restaurant, Reservation, Table],
-                                    url="localhost", db_name='postgres',
+                                    url=DB_ADDRESS+':'+str(PORT), db_name='postgres',
                                     username='restaurant_service', password='password')
             base.metadata.create_all(self.db_con.db)
         self.register_task(self.get_restaurants, 'get_restaurants')
@@ -143,9 +150,9 @@ if __name__ == '__main__':
     # service.drop_table('restaurants')
 
     # force-cleaning
-    service.clear_table('reservations', force=True)
-    service.clear_table('tables', force=True)
-    service.clear_table('restaurants', force=True)
+    # service.clear_table('reservations', force=True)
+    # service.clear_table('tables', force=True)
+    # service.clear_table('restaurants', force=True)
 
 
     # Initiating tables
@@ -153,5 +160,5 @@ if __name__ == '__main__':
     # service.init_table('restaurants', restaurants_data)
     # service.init_table('tables', tables_data)
     # service.init_table('reservations', reservations_data, force=True)
-
+    print('dziala')
     service.run()

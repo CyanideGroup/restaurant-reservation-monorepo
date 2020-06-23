@@ -14,10 +14,14 @@ import database_connector.db_connector
 import service
 import sqlalchemy
 
+DB_ADDRESS = '172.17.0.1'
+RABBITMQ_URL = '172.17.0.1'
+PORT = 5433
+
 class ReservationService(service.Service):
     def __init__(self, name='reservation_service', use_mock_database=False):
         super().__init__(name, table_names=['restaurants', 'reservations', 'tables'],
-                         owned_tables=['reservations'])
+                         owned_tables=['reservations'], url=RABBITMQ_URL)
         if use_mock_database:
             self.db_con = database_connector.db_connector.DBConnectorMock()
         else:
@@ -59,7 +63,7 @@ class ReservationService(service.Service):
 
             # Assigning an SQLAlchemy database connector
             self.db_con = sql_alchemy_connector.SQLAlchemyConnector([Restaurant, Reservation, Table],
-                                                                    url='localhost', db_name='postgres',
+                                                                    url=DB_ADDRESS+':'+str(PORT), db_name='postgres',
                                                                     username='reservation_service', password='password')
 
             # Creating the tables if they do not exist
@@ -91,11 +95,12 @@ class ReservationService(service.Service):
         data = {}
         reservation_time = datetime.timedelta(hours=3)
         for time in times:
+            data[time.time()] = []
             for table in tables:
                 is_free = True
                 for reservation in reservations:
-                    if time not in data.keys():
-                        data[time] = []
+                    # if time not in data.keys():
+                    #     data[time] = []
                     res_time = reservation['time']
                     res_datetime = datetime.datetime.combine(date, res_time)
                     if reservation['table_id'] == table['_id'] \
@@ -103,7 +108,7 @@ class ReservationService(service.Service):
                         is_free = False
                         break
                 if is_free:
-                    data[time].append(table)
+                    data[time.time()].append(table)
         return data
 
     def create_reservation(self, data):
@@ -130,14 +135,14 @@ if __name__ == '__main__':
     # service.drop_table('restaurants')
 
     # force-cleaning
-    service.clear_table('reservations')
-    service.clear_table('tables', force=True)
-    service.clear_table('restaurants', force=True)
+    # service.clear_table('reservations')
+    # service.clear_table('tables', force=True)
+    # service.clear_table('restaurants', force=True)
 
     # Initiating tables
     # restaurants_data, tables_data, reservations_data = get_init_data()
     # service.init_table('restaurants', restaurants_data, force=True)
     # service.init_table('tables', tables_data, force=True)
     # service.init_table('reservations', reservations_data)
-
+    print('dziala')
     service.run()
