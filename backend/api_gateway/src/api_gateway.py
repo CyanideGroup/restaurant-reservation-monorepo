@@ -28,7 +28,7 @@ app.secret_key = GOOGLE_CLIENT_SECRET
 CORS(app)
 
 # app.register_blueprint(google_auth.app)
-RPC_ADDRESS = '172.17.0.1'
+RPC_ADDRESS = '172.18.0.1'
 
 notification_service = callme.Proxy(server_id='notification_service', amqp_host=RPC_ADDRESS)
 reservation_service = callme.Proxy(server_id='reservation_service', amqp_host=RPC_ADDRESS)
@@ -158,4 +158,4 @@ if __name__ == '__main__':
         for row in reservations_data:
             create_reservation(row)
     # report = get_report(0)
-    app.run(port=5000)
+    app.run(host='0.0.0.0', port=5000)
