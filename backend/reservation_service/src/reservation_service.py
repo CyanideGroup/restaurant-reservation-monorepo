@@ -135,14 +135,14 @@ if __name__ == '__main__':
     # service.drop_table('restaurants')
 
     # force-cleaning
-    service.clear_table('reservations')
-    service.clear_table('tables', force=True)
-    service.clear_table('restaurants', force=True)
+    # service.clear_table('reservations')
+    # service.clear_table('tables', force=True)
+    # service.clear_table('restaurants', force=True)
 
     # Initiating tables
     # restaurants_data, tables_data, reservations_data = get_init_data()
     # service.init_table('restaurants', restaurants_data, force=True)
     # service.init_table('tables', tables_data, force=True)
     # service.init_table('reservations', reservations_data)
-
+    print('dziala')
     service.run()

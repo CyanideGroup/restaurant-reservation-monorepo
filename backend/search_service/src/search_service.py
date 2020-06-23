@@ -119,4 +119,5 @@ if __name__ == '__main__':
     # service.init_table('reservations', reservations_data, force=True)
 
     # service.search(date=datetime.date.today(), guests=1, time=datetime.time(6), restaurant_name='mcd')
+    print('dziala')
     service.run()

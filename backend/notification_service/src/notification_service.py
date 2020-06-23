@@ -121,11 +121,12 @@ if __name__ == '__main__':
     # constrains) and filling the restaurants table with initial data.
     # Since notification service is not the owner of any tables, it
     # normally would not have permission to edit them, hence the `force` flag
-    service.clear_table('reservations', force=True)
-    service.clear_table('tables', force=True)
-    service.clear_table('restaurants', force=True)
+    # service.clear_table('reservations', force=True)
+    # service.clear_table('tables', force=True)
+    # service.clear_table('restaurants', force=True)
 
     # running the service. If reservation service is run afterwards, all the
     # reservation data added via reservation service will be automatically added
     # to reservations table of this service
+    print('dziala')
     service.run()
