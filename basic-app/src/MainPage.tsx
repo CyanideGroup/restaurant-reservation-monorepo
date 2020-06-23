@@ -49,8 +49,15 @@ export const MainPage = ({setIsLogged, apiGatewayService}: {apiGatewayService: a
   return <div>
     <SearchBar onSearch={onSearch}/>
     <div className='content'>
-      <Filters setFinalPriceFilters={setPriceFilters} setFinalCuisineFilters={setCuisineFilters}/>
-      {restaurants && <Restaurants restaurants={restaurants} cuisineFilters={cuisineFilters} priceFilters={priceFilters}/>}
+      <div className='content-wrapper'>
+        <Filters setFinalPriceFilters={setPriceFilters} setFinalCuisineFilters={setCuisineFilters}/>
+        {restaurants && <Restaurants 
+          onReserve={(args?: any[]) => history.push('/reservation', args)}
+          restaurants={restaurants}
+          cuisineFilters={cuisineFilters}
+          priceFilters={priceFilters}
+        />}
+      </div>
     </div>
   </div>;
 };

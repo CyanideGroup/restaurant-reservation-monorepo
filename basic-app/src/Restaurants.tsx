@@ -4,9 +4,10 @@ interface RestaurantsProps {
   restaurants: any;
   priceFilters: any;
   cuisineFilters: any[];
+  onReserve: (args?: any[]) => void;
 }
 
-export const Restaurants = ({restaurants, priceFilters, cuisineFilters}: RestaurantsProps) => {
+export const Restaurants = ({restaurants, priceFilters, cuisineFilters, onReserve}: RestaurantsProps) => {
   return <div className='restaurants-box'>
     {Object.keys(restaurants)
       .filter(key => priceFilters.length === 0 || priceFilters.includes(restaurants[key].pricing))
@@ -25,7 +26,7 @@ export const Restaurants = ({restaurants, priceFilters, cuisineFilters}: Restaur
             <div className='restaurant-box-description'>{restaurants[key].description}</div>
             <div className='restaurant-box-buttons-wrapper'>
               <button className='basic-button restaurant-box-button more'>Dowiedz się więcej</button>
-              <button className='basic-button coloured-button restaurant-box-button reserve'>Rezerwuj</button>
+              <button onClick={() => onReserve()} className='basic-button coloured-button restaurant-box-button reserve'>Rezerwuj</button>
             </div>
           </div>
         </div>)}

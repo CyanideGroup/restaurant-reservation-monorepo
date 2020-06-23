@@ -17,7 +17,7 @@ const getPossibleHours = () => {
   return arr;
 }
 
-const getGuestsArray = (number: number) => {
+export const getGuestsArray = (number: number) => {
   let array = [];
   for(let i = 0; i < number; i++){
     array.push({value: i+1, label:`${i+1} ${i == 0 ? 'gość' : 'gości'}`});

@@ -9,22 +9,26 @@ body {
 }
 
 .bigBox {
-  background: url("../img/bg1.jpg") fixed center center;
-  background-color: blue;
+  /* background: url("../img/bg1.jpg") fixed center center; */
+  /* background-color: blue; */
   background-size: cover;
   text-align: center;
-  height: 100%;
+  /* height: 100%; */
   overflow: hidden;
   padding: 0px;
 }
 
 .box {
-  width: 400px;
+  width: 900px;
   background: white;
-  display: inline-grid;
-  margin-top: 50px;
+  /* display: inline-grid; */
+  display: block;
+  margin-top: 10px;
   padding: 10px;
   border-radius: 5px;
+  height: 100%;
+  margin-right: auto;
+  margin-left: auto;
 }
 
 .hours {
