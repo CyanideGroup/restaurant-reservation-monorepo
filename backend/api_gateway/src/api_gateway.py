@@ -29,7 +29,7 @@ CORS(app)
 
 # app.register_blueprint(google_auth.app)
 RPC_ADDRESS = '172.18.0.1'
-RPC_ADDRESS = 'localhost'
+# RPC_ADDRESS = 'localhost'
 
 notification_service = callme.Proxy(server_id='notification_service', amqp_host=RPC_ADDRESS)
 reservation_service = callme.Proxy(server_id='reservation_service', amqp_host=RPC_ADDRESS)
@@ -98,14 +98,15 @@ def reservation():
         data['time'] = datetime.time(*data['date'].split(':'))
         created, data = create_reservation(data)
         return f'Reservation ID: {data["id"]}'
-    date = datetime.date(*[int(arg) for arg in request.args.get('date').split('.')])
-    restaurant_id = request.args.get('restaurant_id')
+    # date = datetime.date(*[int(arg) for arg in request.args.get('date').split('.')])
+    restaurant_id = int(request.args.get('restaurant_id'))
     days = request.args.get('days')
     if days is None:
         days = 30
     result = {}
     for i in range(days):
-        result[str(datetime.date.today()+datetime.timedelta(days=i))] = serialize_dict(search_terms(restaurant_id, date))
+        result[str(datetime.date.today()+datetime.timedelta(days=i))] =\
+            serialize_dict(search_terms(restaurant_id, datetime.date.today()+datetime.timedelta(days=i)))
     return result
 
 @app.route('/search', methods=['GET', 'POST'])
@@ -153,4 +154,4 @@ if __name__ == '__main__':
         for row in reservations_data:
             create_reservation(row)
     # report = get_report(0)
-    app.run(host='0.0.0.0', port=5002)
+    app.run(host='0.0.0.0', port=5000)
