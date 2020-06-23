@@ -59,7 +59,7 @@ export const ReservationSummarise = ({reservation, apiGatewayService}: Reservati
       disabled={!agreed || !email} 
       className='basic-button coloured-button reservation-summarise-button' 
       onClick={async () => {
-        await apiGatewayService.reserve({...reservation, email});
+        await apiGatewayService.reserve({...reservation, restaurantId: '1', email});
       }}>
       Rezerwuj
     </button>
