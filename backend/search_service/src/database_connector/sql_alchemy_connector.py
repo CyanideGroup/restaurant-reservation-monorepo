@@ -87,14 +87,19 @@ class SQLAlchemyConnector(DBConnector):
                   incomplete table and ask for the missing record)
 
         """
-        table_class = self.table_data[table_name]
-        object = table_class()
-        for key, value in data.items():
-            setattr(object, key, value)
-        self.session.add(object)
-        if commit:
-            self.session.commit()
-            return True, self.row2dict(object)
+        try:
+            table_class = self.table_data[table_name]
+            object = table_class()
+            for key, value in data.items():
+                setattr(object, key, value)
+            self.session.add(object)
+            if commit:
+                self.session.commit()
+                return True, self.row2dict(object)
+        except Exception as e:
+            self.session.rollback()
+            print(e)
+            return False, None
 
     def clear(self, table_name, commit=True):
         """
@@ -102,18 +107,27 @@ class SQLAlchemyConnector(DBConnector):
         :param table_name:
         :return:
         """
-        table_class = self.table_data[table_name]
-        self.session.query(table_class).delete()
-        if commit:
-            self.session.commit()
-        return True
+        try:
+            table_class = self.table_data[table_name]
+            self.session.query(table_class).delete()
+            if commit:
+                self.session.commit()
+            return True
+        except Exception as e:
+            self.session.rollback()
+            print(e)
+            return False
 
     def drop(self, table_name, commit=True):
-        table_class = self.table_data[table_name]
-        table_class.__table__.drop(self.db)
-        if commit:
-            self.session.commit()
-        return True
+        try:
+            table_class = self.table_data[table_name]
+            table_class.__table__.drop(self.db)
+            if commit:
+                self.session.commit()
+            return True
+        except Exception as e:
+            print(e)
+            return False
 
     def update(self, table_name, data):
         """

@@ -55,6 +55,8 @@ def index():
 @app.route('/<table_name>', methods=['GET', 'POST'])
 def select(table_name):
     if request.method == 'GET':
+        if table_name not in table_owners.keys():
+            return "invalid table name!"
         service_rpc = table_owners[table_name][0]
         result = service_rpc.use_server(table_owners[table_name][1]).select(table_name)
         result = [serialize_dict(row) for row in result]
@@ -65,10 +67,11 @@ def clear(table_name):
     if request.method == 'GET':
         service_rpc = table_owners[table_name][0]
         result = service_rpc.use_server(table_owners[table_name][1]).clear(table_name)
-        return 'cleared table'
+        return f'cleared table {table_name}' if result else 'error'
 
 @app.route('/init/<table_name>')
 def init(table_name):
+    created = False
     if request.method == 'GET':
         restaurants_data, tables_data, reservations_data = get_init_data()
         # Populating data
@@ -81,12 +84,12 @@ def init(table_name):
         if table_name == 'tables':
             service_rpc = table_owners[table_name][0]
             for row in tables_data:
-                service_rpc.use_server(table_owners[table_name][1]).create(table_name, row)
+                created, data = service_rpc.use_server(table_owners[table_name][1]).create(table_name, row)
 
         if table_name == 'reservations':
             service_rpc = table_owners[table_name][0]
             for row in reservations_data:
-                service_rpc.use_server(table_owners[table_name][1]).create(table_name, row)
-    return f'{table_name} initialized!'
+                created, data = service_rpc.use_server(table_owners[table_name][1]).create(table_name, row)
+    return f'{table_name} initialized!' if created else 'error'
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5001)

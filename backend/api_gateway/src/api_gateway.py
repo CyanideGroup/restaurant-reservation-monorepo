@@ -153,4 +153,4 @@ if __name__ == '__main__':
         for row in reservations_data:
             create_reservation(row)
     # report = get_report(0)
-    app.run(host='0.0.0.0', port=5004)
+    app.run(host='0.0.0.0', port=5002)
