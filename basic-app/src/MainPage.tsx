@@ -99,7 +99,7 @@ const Filters = ({setFinalPriceFilters, setFinalCuisineFilters}: {setFinalCuisin
   </div>
 }
 
-const InputChecked = ({name, changeFilter}: {changeFilter: (arg: any) => void, name: string}) => {
+export const InputChecked = ({name, changeFilter}: {changeFilter: (arg: any) => void, name: string}) => {
   return <label className="container">{name}
     <input type="checkbox" onChange={() => changeFilter(name)}/>
     <span className="checkmark"></span>

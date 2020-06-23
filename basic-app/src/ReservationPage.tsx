@@ -9,7 +9,7 @@ import {getGuestsArray} from './SearchBar';
 
 interface ReservationPageProps {
   apiGatewayService: ApiGatewayService;
-  setAppContent: (arg: string) => void;
+  setAppContent: (...args: any[]) => void;
   hours: Record<string, Record<string, boolean>>;
   initialNumberOfGuests: string;
   restaurantName: string;
@@ -38,7 +38,6 @@ export const ReservationPage = ({apiGatewayService, setAppContent, hours, initia
       </div>
       <div className="left-box">
         <div className="guests">
-          <div className="text">Liczba gości: {guestNumber}</div>
           <div className="select">
             <Select 
               options={guestArr}
@@ -46,26 +45,30 @@ export const ReservationPage = ({apiGatewayService, setAppContent, hours, initia
               onChange={(arg: any) => setGuestNumber(arg.value)}/>
           </div>
         </div>
-        <div className="reservation">
-          Reservation for {formatDate(date)} {hour}
-          <div className="ButtonReserve">
-            <button
-              className="reservation__button"
-              onClick={async () => {
-                console.log(
-                  await apiGatewayService.reserve({
-                    date,
-                    time: hour,
-                    restaurantId: "1",
-                  })
-                )
-                setAppContent('reserved');
-              }
-              }
-            >
-              Reserve
-            </button>
-          </div>
+        <div className="reservation-page-button-wrapper">
+          <button
+            className="reservation__button basic-button coloured-button"
+            disabled={!hour}
+            onClick={async () => {
+              console.log('reserve'
+                // await apiGatewayService.reserve({
+                //   date,
+                //   time: hour,
+                //   restaurantId: "1",
+                // })
+              )
+              setAppContent({
+                date,
+                time: hour,
+                restaurantId: "1",
+                guestNumber,
+                restaurantName,
+              });
+            }
+            }
+          >
+            Rezerwuj
+          </button>
         </div>
 
       </div>
@@ -73,15 +76,15 @@ export const ReservationPage = ({apiGatewayService, setAppContent, hours, initia
       <div className="hours">
         <ul className="hours__list">
           {hours[formatDate(date)] ? 
-            Object.keys(hours[formatDate(date)]).map((hour) => 
-            hour ?
-            <li key={hour} className={`one-hour__list-element ${hour}`}>
+            Object.keys(hours[formatDate(date)]).map((element) => 
+            element ?
+            <li key={element} className={`one-hour__list-element ${hour}`}>
               <button 
-                disabled={hours[formatDate(date)] ? hours[formatDate(date)][hour] : false} 
-                className={`one-hour__button ${hour}`}
-                onClick={() => setHour(hour.toString())}
+                disabled={hours[formatDate(date)] ? hours[formatDate(date)][element] : false} 
+                className={`basic-button one-hour__button ${element === hour && 'choosen'}`}
+                onClick={() => setHour(element.toString())}
               >
-                {hour}
+                {element}
               </button>
             </li>
             : 

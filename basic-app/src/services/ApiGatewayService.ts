@@ -43,6 +43,7 @@ type Reservation = {
   date: Date;
   time: string;
   restaurantId: string;
+  email: string;
 }
 
 export type Search = {
