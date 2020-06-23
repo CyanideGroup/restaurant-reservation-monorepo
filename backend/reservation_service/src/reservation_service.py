@@ -16,8 +16,6 @@ import sqlalchemy
 
 DB_ADDRESS = '172.17.0.1'
 RABBITMQ_URL = '172.17.0.1'
-DB_ADDRESS = 'localhost'
-RABBITMQ_URL = 'localhost'
 PORT = 5433
 
 class ReservationService(service.Service):

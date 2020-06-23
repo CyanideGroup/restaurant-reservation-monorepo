@@ -15,8 +15,6 @@ from _collections import OrderedDict
 
 DB_ADDRESS = '172.17.0.1'
 RABBITMQ_URL = '172.17.0.1'
-DB_ADDRESS = 'localhost'
-RABBITMQ_URL = 'localhost'
 PORT = 5432
 
 class RestaurantService(service.Service):
