@@ -126,7 +126,6 @@ def search():
         return available_restaurants
     return 'nic'
 
-
 @app.route("/manager/report")
 def report():
     # if not google_auth.is_logged_in():
@@ -145,7 +144,7 @@ def report():
     return report
 
 if __name__ == '__main__':
-    test = True
+    test = False
     if test:
         restaurants_data, tables_data, reservations_data = get_init_data()
         # Populating data

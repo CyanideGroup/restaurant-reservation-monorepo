@@ -26,8 +26,10 @@ app = flask.Flask(__name__)
 # app.secret_key = GOOGLE_CLIENT_SECRET
 CORS(app)
 
-reservation_service = callme.Proxy(server_id='reservation_service', amqp_host='localhost')
-restaurant_service = callme.Proxy(server_id='restaurant_service', amqp_host='localhost')
+RABBITMQ_URL = 'localhost'
+
+reservation_service = callme.Proxy(server_id='reservation_service', amqp_host=RABBITMQ_URL)
+restaurant_service = callme.Proxy(server_id='restaurant_service', amqp_host=RABBITMQ_URL)
 
 table_owners = {'restaurants': (restaurant_service, 'restaurant_service'),
                 'tables': (restaurant_service, "restaurant_service"),
@@ -58,5 +60,33 @@ def select(table_name):
         result = [serialize_dict(row) for row in result]
         return jsonify(result)
 
+@app.route('/clear/<table_name>')
+def clear(table_name):
+    if request.method == 'GET':
+        service_rpc = table_owners[table_name][0]
+        result = service_rpc.use_server(table_owners[table_name][1]).clear(table_name)
+        return 'cleared table'
+
+@app.route('/init/<table_name>')
+def init(table_name):
+    if request.method == 'GET':
+        restaurants_data, tables_data, reservations_data = get_init_data()
+        # Populating data
+
+        if table_name == 'restaurants':
+            service_rpc = table_owners[table_name][0]
+            for row in restaurants_data:
+                created, data = service_rpc.use_server(table_owners[table_name][1]).create(table_name, row)
+
+        if table_name == 'tables':
+            service_rpc = table_owners[table_name][0]
+            for row in tables_data:
+                service_rpc.use_server(table_owners[table_name][1]).create(table_name, row)
+
+        if table_name == 'reservations':
+            service_rpc = table_owners[table_name][0]
+            for row in reservations_data:
+                service_rpc.use_server(table_owners[table_name][1]).create(table_name, row)
+    return f'{table_name} initialized!'
 if __name__ == '__main__':
     app.run(port=5001)
