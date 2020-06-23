@@ -29,12 +29,14 @@ CORS(app)
 
 # app.register_blueprint(google_auth.app)
 RPC_ADDRESS = '172.18.0.1'
+RPC_ADDRESS = 'localhost'
 
 notification_service = callme.Proxy(server_id='notification_service', amqp_host=RPC_ADDRESS)
 reservation_service = callme.Proxy(server_id='reservation_service', amqp_host=RPC_ADDRESS)
 search_service = callme.Proxy(server_id='search_service', amqp_host=RPC_ADDRESS)
 restaurant_service = callme.Proxy(server_id='restaurant_service', amqp_host=RPC_ADDRESS)
 
+user_info = {'email': 'pawelzakieta97@gmail.com'}
 
 def create_restaurant(data):
     return restaurant_service.use_server('restaurant_service').create_restaurant(data)
@@ -85,13 +87,8 @@ def serialize_dict(dict):
 
 @app.route('/')
 def index():
-    # if google_auth.is_logged_in():
-    #     user_info = google_auth.get_user_info()
-    #     # response = [serialize_dict(rest) for rest in get_restaurants_by_owner(user_info['email'])]
-    #     # return jsonify(response)
-    #     return '<div>You are currently logged in as ' + user_info['given_name'] + '<div><pre>' + json.dumps(user_info, indent=4) + "</pre>"
-
-    return 'init page'
+    response = [serialize_dict(rest) for rest in get_restaurants_by_owner(user_info['email'])]
+    return jsonify(response)
 
 @app.route('/reservation', methods=['GET', 'POST'])
 def reservation():
@@ -126,13 +123,12 @@ def search():
         return available_restaurants
     return 'nic'
 
+@app.route("/restaurant/<restaurant_id>")
+def get_restaurant(restaurant_id):
+    return serialize_dict(get_restaurants(filter={'_id': int(restaurant_id)})[0])
+
 @app.route("/manager/report")
 def report():
-    # if not google_auth.is_logged_in():
-    #     return
-
-    # user_info = google_auth.get_user_info()
-    user_info = {'email': 'pawelzakieta97@gmail.com'}
     restaurant_id = int(request.args.get('restaurant_id'))
     restaurants = get_restaurants_by_owner(user_info['email'])
     if restaurant_id not in [restaurant['_id'] for restaurant in restaurants]:
@@ -157,4 +153,4 @@ if __name__ == '__main__':
         for row in reservations_data:
             create_reservation(row)
     # report = get_report(0)
-    app.run(host='0.0.0.0', port=5000)
+    app.run(host='0.0.0.0', port=5004)
