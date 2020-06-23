@@ -126,6 +126,10 @@ def search():
         return available_restaurants
     return 'nic'
 
+@app.route("/restaurant/<restaurant_id>")
+def get_restaurant(restaurant_id):
+    return serialize_dict(get_restaurants(filter={'_id': int(restaurant_id)})[0])
+
 @app.route("/manager/report")
 def report():
     # if not google_auth.is_logged_in():
