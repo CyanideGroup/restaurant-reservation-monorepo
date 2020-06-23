@@ -214,7 +214,7 @@ class Service:
             cleared = self.db_con.clear(table_name)
             if cleared:
                 data = {'method': 'clear'}
-                self.channel.basic_publish(exchange=table_name, routing_key='',
+                self.rpc_channel.basic_publish(exchange=table_name, routing_key='',
                                            body=str(data))
         else:
             cleared = self.db_con.clear(table_name)
