@@ -17,7 +17,7 @@ import json
 #     logout_user,
 # )
 import flask
-import google_auth
+# import google_auth
 
 app = flask.Flask(__name__)
 CREDENTIALS_FILENAME = 'app_credentials.txt'
@@ -27,11 +27,13 @@ GOOGLE_CLIENT_SECRET = f.readline().strip()
 app.secret_key = GOOGLE_CLIENT_SECRET
 CORS(app)
 
-app.register_blueprint(google_auth.app)
-notification_service = callme.Proxy(server_id='notification_service', amqp_host='localhost')
-reservation_service = callme.Proxy(server_id='reservation_service', amqp_host='localhost')
-search_service = callme.Proxy(server_id='search_service', amqp_host='localhost')
-restaurant_service = callme.Proxy(server_id='restaurant_service', amqp_host='localhost')
+# app.register_blueprint(google_auth.app)
+RPC_ADDRESS = '172.17.0.1'
+
+notification_service = callme.Proxy(server_id='notification_service', amqp_host=RPC_ADDRESS)
+reservation_service = callme.Proxy(server_id='reservation_service', amqp_host=RPC_ADDRESS)
+search_service = callme.Proxy(server_id='search_service', amqp_host=RPC_ADDRESS)
+restaurant_service = callme.Proxy(server_id='restaurant_service', amqp_host=RPC_ADDRESS)
 
 
 def create_restaurant(data):
@@ -83,13 +85,13 @@ def serialize_dict(dict):
 
 @app.route('/')
 def index():
-    if google_auth.is_logged_in():
-        user_info = google_auth.get_user_info()
-        # response = [serialize_dict(rest) for rest in get_restaurants_by_owner(user_info['email'])]
-        # return jsonify(response)
-        return '<div>You are currently logged in as ' + user_info['given_name'] + '<div><pre>' + json.dumps(user_info, indent=4) + "</pre>"
+    # if google_auth.is_logged_in():
+    #     user_info = google_auth.get_user_info()
+    #     # response = [serialize_dict(rest) for rest in get_restaurants_by_owner(user_info['email'])]
+    #     # return jsonify(response)
+    #     return '<div>You are currently logged in as ' + user_info['given_name'] + '<div><pre>' + json.dumps(user_info, indent=4) + "</pre>"
 
-    return 'You are not currently logged in.'
+    return 'init page'
 
 @app.route('/reservation', methods=['GET', 'POST'])
 def reservation():
@@ -127,10 +129,11 @@ def search():
 
 @app.route("/manager/report")
 def report():
-    if not google_auth.is_logged_in():
-        return
+    # if not google_auth.is_logged_in():
+    #     return
 
-    user_info = google_auth.get_user_info()
+    # user_info = google_auth.get_user_info()
+    user_info = {'email': 'pawelzakieta97@gmail.com'}
     restaurant_id = int(request.args.get('restaurant_id'))
     restaurants = get_restaurants_by_owner(user_info['email'])
     if restaurant_id not in [restaurant['_id'] for restaurant in restaurants]:
