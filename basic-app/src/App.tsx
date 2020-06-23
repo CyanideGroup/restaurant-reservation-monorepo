@@ -62,7 +62,7 @@ const App = () => {
           initialNumberOfGuests={'2'}
           restaurantName={'Restauracja'}/>
       </Route>
-      <Route exact path='/reserved' component={({location}) => <ReservationSummarise reservation={location.state?.reservation}/>}/>
+      <Route exact path='/reserved' component={({location}) => <ReservationSummarise reservation={location.state?.reservation} apiGatewayService={apiGatewayService}/>}/>
       <PrivateRoute
         path='/priv'
         isLogged={isLogged}
