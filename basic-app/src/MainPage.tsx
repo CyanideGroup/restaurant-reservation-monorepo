@@ -3,7 +3,8 @@ import { useHistory } from 'react-router';
 import 'react-calendar/dist/Calendar.css';
 import { Search } from './services/ApiGatewayService';
 import { Restaurants } from './Restaurants';
-import {SearchBar} from './SearchBar';
+import { SearchBar } from './SearchBar';
+import { Propositions } from './Propositions';
 
 const lelumPolelum = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
 
@@ -39,10 +40,10 @@ export const MainPage = ({setIsLogged, apiGatewayService}: {apiGatewayService: a
       url: 'https://www.scandichotels.com/imagevault/publishedmedia/qn6infvg30381stkubky/scandic-sundsvall-city-restaurant-verket-10.jpg',
     }
   }
-  const [restaurants, setRestaurants] = useState(result);
+  const [restaurants, setRestaurants] = useState<any>();
   const onSearch = async (search: Search) => {
     console.log(search);
-    // const result = await apiGatewayService.getRestaurants(search);
+    // const result = await apiGatewayService.searchRestaurants(search);
     setRestaurants(result);
   };
 
@@ -50,13 +51,20 @@ export const MainPage = ({setIsLogged, apiGatewayService}: {apiGatewayService: a
     <SearchBar onSearch={onSearch}/>
     <div className='content'>
       <div className='content-wrapper'>
-        <Filters setFinalPriceFilters={setPriceFilters} setFinalCuisineFilters={setCuisineFilters}/>
-        {restaurants && <Restaurants 
-          onReserve={(args?: any[]) => history.push('/reservation', args)}
-          restaurants={restaurants}
-          cuisineFilters={cuisineFilters}
-          priceFilters={priceFilters}
+        {restaurants ?
+          <div>
+            <Filters setFinalPriceFilters={setPriceFilters} setFinalCuisineFilters={setCuisineFilters}/>
+            <Restaurants 
+              onReserve={(args?: any[]) => history.push('/reservation', {restaurant: args})}
+              restaurants={restaurants}
+              cuisineFilters={cuisineFilters}
+              priceFilters={priceFilters}
+            /></div> : 
+        <Propositions
+          apiGatewayService={apiGatewayService}
+          onReserve={(args?: any[]) => history.push('/reservation', {restaurant: args})}
         />}
+
       </div>
     </div>
   </div>;

@@ -24,28 +24,9 @@ export const ReservationSummarise = ({reservation, apiGatewayService}: Reservati
 
   return <div className='reservation-summarise'>
     <div className='reservation-summarise-restaurant-name'>
-      {reservation.restaurantName}
+      {reservation.restaurantName.toUpperCase()}
     </div>
-    <div className='reservation-summarise-date-wrapper'>
-      <div className='reservation-summarise-time-wrapper'>
-        <img className='reservation-summarise-date-img' src={clockImg.default} /> 
-        <div className='reservation-summarise-time'>
-          {reservation.time}
-        </div>
-      </div>
-      <div className='reservation-summarise-date-date-wrapper'>
-        <img className='reservation-summarise-date-img' src={calendarImg.default} /> 
-        <div className='reservation-summarise-time'>
-          {formatDate(reservation.date)}
-        </div>
-      </div>
-      <div className='reservation-summarise-user-wrapper'>
-        <img className='reservation-summarise-date-img' src={userImg.default} /> 
-        <div className='reservation-summarise-time'>
-          {reservation.guestNumber} gości
-        </div>
-      </div>
-    </div>
+    <ReservationSummariseDetails reservation={reservation}/>
   <div className='reservation-summarise-email-input'>
     <div className='email-input-wrapper'>
       <input type='text' className='basic-input search-input email-input' placeholder='imie@gmail.com' onChange={(event) => setEmail(event.target.value)}/>
@@ -65,4 +46,27 @@ export const ReservationSummarise = ({reservation, apiGatewayService}: Reservati
     </button>
   </div>
   </div>;
+}
+
+export const ReservationSummariseDetails = ({reservation}: any) => {
+  return <div className='reservation-summarise-date-wrapper'>
+  <div className='reservation-summarise-time-wrapper'>
+    <img className='reservation-summarise-date-img' src={clockImg.default} /> 
+    <div className='reservation-summarise-time'>
+      {reservation.time}
+    </div>
+  </div>
+  <div className='reservation-summarise-date-date-wrapper'>
+    <img className='reservation-summarise-date-img' src={calendarImg.default} /> 
+    <div className='reservation-summarise-time'>
+      {formatDate(reservation.date)}
+    </div>
+  </div>
+  <div className='reservation-summarise-user-wrapper'>
+    <img className='reservation-summarise-date-img' src={userImg.default} /> 
+    <div className='reservation-summarise-time'>
+      {reservation.guestNumber} gości
+    </div>
+  </div>
+</div>
 }

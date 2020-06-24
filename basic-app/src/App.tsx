@@ -6,7 +6,8 @@ import { ApiGatewayService } from './services/ApiGatewayService';
 import './styles/main.sass';
 import { PrivateRoute } from './PrivateRoute';
 import { Restaurants } from './Restaurants';
-import {ReservationSummarise} from './ReservationSummarise';
+import { ReservationSummarise } from './ReservationSummarise';
+import { Reserved } from './Reserved';
 
 const hours = {
   ['2020-05-07']: {
@@ -54,15 +55,16 @@ const App = () => {
   
   return <Switch>
       <Route path='/' exact component={() => <MainPage apiGatewayService={apiGatewayService} setIsLogged={setIsLogged}/>}/>
-      <Route path='/reservation' exact>
-        <ReservationPage
-          setAppContent={(reservation: any) => history.push('/reserved', {reservation})}
+      <Route path='/reservation' exact component={({location}) => <ReservationPage
+          setAppContent={(reservation: any) => history.push('/confirmation', {reservation})}
           apiGatewayService={apiGatewayService}
           hours={hours}
+          restaurant={location.state.restaurant}
           initialNumberOfGuests={'2'}
-          restaurantName={'Restauracja'}/>
-      </Route>
-      <Route exact path='/reserved' component={({location}) => <ReservationSummarise reservation={location.state?.reservation} apiGatewayService={apiGatewayService}/>}/>
+          restaurantName={'Restauracja'}/>}/>
+        
+      <Route exact path='/confirmation' component={({location}) => <ReservationSummarise reservation={location.state?.reservation} apiGatewayService={apiGatewayService}/>}/>
+      <Route exact path='/reserved' component={({location}) => <Reserved reservation={location.state?.reservation}/>}/>
       <PrivateRoute
         path='/priv'
         isLogged={isLogged}
