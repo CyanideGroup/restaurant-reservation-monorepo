@@ -94,7 +94,6 @@ export class ApiGatewayService {
     const restaurants = await this.http('GET', `/search?${searchQuery}`);
     const keys = Object.keys(restaurants);
     keys.forEach(key => (restaurants[key] = {...restaurants[key], pricing: getPricing(restaurants[key].price), url: restaurants[key].img1}))
-    console.log("restaruatns: " , restaurants);
     return restaurants;
   }
 
