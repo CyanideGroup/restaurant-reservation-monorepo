@@ -15,23 +15,27 @@ interface ReservationPageProps {
   restaurantName: string;
   restaurant: any;
 }
-const isAvailable = (date: any, hour: any, guests: any) => {
-  console.log('hour:  ',  hour)
-  console.log('date: ', date[hour])
-  
-  const array = date[hour].filter(element => element.size === parseInt(guests));
-  console.log(array)
-  return date && (array.length === 0);}
-  // date && !date[hour].filter(element => element.size === guests);
+// date && !date[hour].filter(element => element.size === guests);
 
 export const ReservationPage = ({apiGatewayService, restaurant, setAppContent, hours, initialNumberOfGuests, restaurantName}: ReservationPageProps) => {
   const [date, setDate] = useState(new Date());
   const [hour, setHour] = useState('');
   const [guestNumber, setGuestNumber] = useState(initialNumberOfGuests);
+  const [tables, setTables] = useState([]);
   const guestArr = getGuestsArray(9);
   console.log(restaurant);
+
+  const isAvailable = (date: any, hour: any, guests: any) => {
+    console.log('hour:  ',  hour)
+    console.log('date: ', date[hour])
+    const array = date[hour].filter(element => element.size === parseInt(guests));
+    setTables(array);
+    console.log(array)
+    return date && (array.length === 0);
+  }
+
   return (
-  <div className="bigBox">
+    <div className="bigBox">
     <div className="restaurant-img-wrapper">
       <img className="restaurant-img" src={restaurant.url}/>
     </div>
@@ -72,6 +76,7 @@ export const ReservationPage = ({apiGatewayService, restaurant, setAppContent, h
                 restaurantId: restaurant.id,
                 guestNumber,
                 restaurantName: restaurant.name,
+                tableId: tables[0]._id,
               });
             }
             }
