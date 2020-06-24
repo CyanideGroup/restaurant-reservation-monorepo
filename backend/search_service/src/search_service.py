@@ -16,6 +16,8 @@ import service
 
 DB_ADDRESS = '172.17.0.1'
 RABBITMQ_URL = '172.17.0.1'
+# DB_ADDRESS = 'localhost'
+# RABBITMQ_URL = 'localhost'
 PORT = 5434
 
 class SearchService(service.Service):
@@ -109,9 +111,9 @@ if __name__ == '__main__':
     # service.drop_table('restaurants')
 
     # force-cleaning
-    service.clear_table('reservations', force=True)
-    service.clear_table('tables', force=True)
-    service.clear_table('restaurants', force=True)
+    # service.clear_table('reservations', force=True)
+    # service.clear_table('tables', force=True)
+    # service.clear_table('restaurants', force=True)
 
     # Initiating tables
     # service.init_table('restaurants', restaurants_data, force=True)

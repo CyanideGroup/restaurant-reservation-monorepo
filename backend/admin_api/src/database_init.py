@@ -8,16 +8,21 @@ def get_init_data():
     has_files = isfile('restaurants.json') and isfile('tables.json') and isfile('reservations.json')
 
     if has_files:
-        restaurants_data = json.load('restaurants.json')
+        restaurants_data = json.load(open('restaurants.json'))
         for row in restaurants_data:
             row['opens'] = datetime.datetime.strptime(row['opens'], '%H:%M:%S').time()
-            row['closes'] = datetime.datetime.strptime(row['closes'], '%H:%M:%S').time()
+            row['closes'] = datetime.datetime.strptime(row['closed'], '%H:%M:%S').time()
+            row['_id'] = int(row['_id'])
 
-        tables_data = json.load('tables.json')
-        reservations_data = json.load('reservations.json')
+        tables_data = json.load(open('tables.json'))
+        for row in tables_data:
+            row['smoking'] = bool(row['smoking'])
+            row['outside'] = bool(row['outside'])
+            row['_id'] = int(row['_id '])
+        reservations_data = json.load(open('reservations.json'))
         for row in reservations_data:
             row['time'] = datetime.datetime.strptime(row['time'], '%H:%M:%S').time()
-            row['date'] = datetime.datetime.strptime(row['date'], '%Y.%m.%d').date()
+            row['date'] = datetime.datetime.strptime(row['date'], '%d.%m.%Y').date()
         return restaurants_data, tables_data, reservations_data
 
 
@@ -37,9 +42,12 @@ def get_init_data():
     # generating initial tables data
     num_tables = 32
     table_ids = [i for i in range(num_tables)]
-    tables_data = [{'_id': table_ids[i], 'label': str(i), 'size': i % 3 + 2,
+    tables_data = [{'_id': int(table_ids[i]), 'label': str(i), 'size': i % 3 + 2,
                     'restaurant_id': restaurant_ids[i % len(restaurant_names)],
                     'outside': i % 2, 'smoking': i % 2} for i in range(num_tables)]
+    for row in tables_data:
+        row['smoking'] = bool(row['smoking'])
+        row['outside'] = bool(row['outside'])
 
     # generating initial reservations data
     reserv_ids = [i for i in range(len(user_names))]
@@ -50,8 +58,4 @@ def get_init_data():
     return restaurants_data, tables_data, reservations_data
 
 if __name__ == '__main__':
-    with open('restaurants.json') as json_file:
-        data = json.load(json_file)
-        data['opens'] = datetime.datetime.strptime(data['opens'], '%H:%M:%S').time()
-        data['closes'] = datetime.datetime.strptime(data['closes'], '%H:%M:%S').time()
-        print(data)
+    print(get_init_data())

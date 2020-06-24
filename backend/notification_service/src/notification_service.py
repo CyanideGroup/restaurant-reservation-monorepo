@@ -10,12 +10,15 @@ from sqlalchemy.ext.declarative import declarative_base
 import datetime
 import service
 import sqlalchemy
+from mailing import async_send_mail_with_callback
 
 EMAIL_ADDR = 'cyanide_service@wp.pl'
 PASSWORD = 'password'
 
 DB_ADDRESS = '172.17.0.1'
 RABBITMQ_URL = '172.17.0.1'
+# DB_ADDRESS = 'localhost'
+# RABBITMQ_URL = 'localhost'
 PORT = 5435
 
 class NotificationService(service.Service):
@@ -82,6 +85,7 @@ class NotificationService(service.Service):
         print(message)
         pass
         # CALL EMAIL SENDING PROCEDURE VIA CELERY
+        async_send_mail_with_callback(address, topic, message)
 
     def get_today(self):
         return date.today()

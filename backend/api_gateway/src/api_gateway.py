@@ -94,20 +94,28 @@ def index():
 def reservation():
     if request.method == 'POST':
         data = request.get_json()
-        data['date'] = datetime.date(*data['date'].split('.'))
-        data['time'] = datetime.time(*data['date'].split(':'))
+        date_info = data['date'].split('.')
+        year = int(date_info[0])
+        month = int(date_info[1])
+        day = int(date_info[2])
+        data['date'] = datetime.date(year=year, month=month, day=day)
+        time_info = data['time'].split(':')
+        hour = int(time_info[0])
+        minute = int(time_info[1])
+        data['time'] = datetime.time(hour=hour, minute=minute)
         created, data = create_reservation(data)
-        return f'Reservation ID: {data["id"]}'
+        return f'Reservation ID: {data["_id"]}'
     # date = datetime.date(*[int(arg) for arg in request.args.get('date').split('.')])
-    restaurant_id = int(request.args.get('restaurant_id'))
-    days = request.args.get('days')
-    if days is None:
-        days = 30
-    result = {}
-    for i in range(days):
-        result[str(datetime.date.today()+datetime.timedelta(days=i))] =\
-            serialize_dict(search_terms(restaurant_id, datetime.date.today()+datetime.timedelta(days=i)))
-    return result
+    if request.method == 'GET':
+        restaurant_id = int(request.args.get('restaurant_id'))
+        days = request.args.get('days')
+        if days is None:
+            days = 30
+        result = {}
+        for i in range(days):
+            result[str(datetime.date.today()+datetime.timedelta(days=i))] =\
+                serialize_dict(search_terms(restaurant_id, datetime.date.today()+datetime.timedelta(days=i)))
+        return jsonify(result)
 
 @app.route('/search', methods=['GET', 'POST'])
 def search():
@@ -121,12 +129,13 @@ def search():
         for key, values in available_restaurants.items():
             available_restaurants[key]['opens'] = str(available_restaurants[key]['opens'])
             available_restaurants[key]['closes'] = str(available_restaurants[key]['closes'])
-        return available_restaurants
-    return 'nic'
+        return jsonify(available_restaurants)
+    return jsonify('nic')
 
 @app.route("/restaurant/<restaurant_id>")
 def get_restaurant(restaurant_id):
-    return serialize_dict(get_restaurants(filter={'_id': int(restaurant_id)})[0])
+    if request.method == 'GET':
+        return jsonify(serialize_dict(get_restaurants(filter={'_id': int(restaurant_id)})[0]))
 
 @app.route("/manager/report")
 def report():

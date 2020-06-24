@@ -33,7 +33,7 @@ class Service:
 
         # Opening connection with RabbotMQ for events handling
         self.url = url
-        connection = pika.BlockingConnection(pika.ConnectionParameters(host=url))
+        connection = pika.BlockingConnection(pika.ConnectionParameters(host=url, blocked_connection_timeout=6000, heartbeat=6000))
         self.channel = connection.channel()
         self.rpc_channel = None
         self.console_debug = console_debug
@@ -229,7 +229,7 @@ class Service:
             self.create_record(table_name, row, force)
 
     def start_rpc_server(self):
-        connection = pika.BlockingConnection(pika.ConnectionParameters(host=self.url))
+        connection = pika.BlockingConnection(pika.ConnectionParameters(host=self.url, blocked_connection_timeout=6000, heartbeat=6000))
         self.rpc_channel = connection.channel()
         self.server.start()
 

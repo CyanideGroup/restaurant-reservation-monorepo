@@ -27,6 +27,7 @@ app = flask.Flask(__name__)
 CORS(app)
 
 RABBITMQ_URL = '172.18.0.1'
+# RABBITMQ_URL = 'localhost'
 
 reservation_service = callme.Proxy(server_id='reservation_service', amqp_host=RABBITMQ_URL)
 restaurant_service = callme.Proxy(server_id='restaurant_service', amqp_host=RABBITMQ_URL)
