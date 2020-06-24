@@ -5,6 +5,7 @@ const calendarImg = require('./styles/assets/calendar.svg');
 const userImg = require('./styles/assets/user.svg');
 import {InputChecked} from './MainPage';
 import { ApiGatewayService } from './services/ApiGatewayService';
+import { useHistory } from 'react-router-dom';
 
 interface ReservationSummariseProps {
   reservation: {
@@ -19,6 +20,7 @@ interface ReservationSummariseProps {
 const agreement = 'Zgadzam się na...';
 
 export const ReservationSummarise = ({reservation, apiGatewayService}: ReservationSummariseProps) => {
+  const history = useHistory();
   const [email, setEmail] = useState('');
   const [agreed, setAgreed] = useState(false);
 
@@ -41,6 +43,7 @@ export const ReservationSummarise = ({reservation, apiGatewayService}: Reservati
       className='basic-button coloured-button reservation-summarise-button' 
       onClick={async () => {
         await apiGatewayService.reserve({...reservation, restaurantId: '1', email});
+        history.push('/reserved', {reservation: {...reservation, email}});
       }}>
       Rezerwuj
     </button>
