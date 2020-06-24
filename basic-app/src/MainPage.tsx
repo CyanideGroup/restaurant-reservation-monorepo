@@ -50,7 +50,7 @@ export const MainPage = ({setIsLogged, apiGatewayService}: {apiGatewayService: a
 
   const onReserveClick = async(restaurant: any) => {
     const hours = await apiGatewayService.getDate(restaurant.id);
-
+    console.log(hours);
     history.push('/reservation', {hours, restaurant});
   }
   
