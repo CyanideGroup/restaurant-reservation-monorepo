@@ -59,7 +59,7 @@ export type Search = {
 const parseDate = (date: Date) => `${date.getFullYear()}.${date.getMonth()}.${date.getDay()}`;
 
 const parseSearch = ({date, time, guests, name, address}: Search) => {
-  let query = `time=${time}:00&guests=${guests}&date=${parseDate(date)}`;
+  let query = `time=${time}:00&guests=${guests}&date=2020.06.24`;
   if (name)
     query += `&name=${name}`;
   if (address)
@@ -76,13 +76,16 @@ export class ApiGatewayService {
   }
 
   getDate(restaurant_id: any) {
-    return hours;    
+    // return hours;    
     console.log('restaurant_id:', restaurant_id)
     return this.http('GET', `/reservation?restaurant_id=${restaurant_id}`);
   }
 
   reserve(reservation: Reservation) {
-    // return this.http('POST', '/reservation', reservation);
+    
+    console.log('reservation: ', reservation)
+    return this.http('POST', '/reservation', {...reservation, date: "2020.06.24"});
+    return this.http('POST', '/reservation', reservation);
   }
 
   async searchRestaurants(search: Search) {
@@ -91,7 +94,7 @@ export class ApiGatewayService {
     const restaurants = await this.http('GET', `/search?${searchQuery}`);
     const keys = Object.keys(restaurants);
     keys.forEach(key => (restaurants[key] = {...restaurants[key], pricing: getPricing(restaurants[key].price), url: restaurants[key].img1}))
-    console.log(restaurants);
+    console.log("restaruatns: " , restaurants);
     return restaurants;
   }
 

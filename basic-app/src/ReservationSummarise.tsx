@@ -61,7 +61,7 @@ export const ReservationSummariseDetails = ({reservation}: any) => {
   <div className='reservation-summarise-time-wrapper'>
     <img className='reservation-summarise-date-img' src={clockImg.default} /> 
     <div className='reservation-summarise-time'>
-      {reservation.time}
+      {reservation.time.split(':').length === 3 ? `${reservation.time.split(':')[0]}:${reservation.time.split(':')[1]}` : reservation.time}
     </div>
   </div>
   <div className='reservation-summarise-date-date-wrapper'>

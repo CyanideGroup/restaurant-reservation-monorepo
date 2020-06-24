@@ -60,7 +60,7 @@ const App = () => {
           apiGatewayService={apiGatewayService}
           hours={location.state.hours}
           restaurant={location.state.restaurant}
-          initialNumberOfGuests={'2'}
+          initialNumberOfGuests={location.state.search.guests}
           restaurantName={'Restauracja'}/>}/>
         
       <Route exact path='/confirmation' component={({location}) => <ReservationSummarise reservation={location.state?.reservation} apiGatewayService={apiGatewayService}/>}/>

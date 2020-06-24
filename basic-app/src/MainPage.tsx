@@ -12,6 +12,7 @@ export const MainPage = ({setIsLogged, apiGatewayService}: {apiGatewayService: a
   const history = useHistory();
   const [priceFilters, setPriceFilters] = useState([]);
   const [cuisineFilters, setCuisineFilters] = useState([]);
+  const [searchResult, setSearch] = useState<any>();
   // const result = {
   //   0: {
   //     _id: 0,
@@ -44,14 +45,17 @@ export const MainPage = ({setIsLogged, apiGatewayService}: {apiGatewayService: a
   const [restaurants, setRestaurants] = useState<any>();
   const onSearch = async (search: Search) => {
     console.log(search);
+    setSearch(search);
     const result = await apiGatewayService.searchRestaurants(search);
     setRestaurants(result);
+    console.log('result: ', result)
   };
 
   const onReserveClick = async(restaurant: any) => {
-    const hours = await apiGatewayService.getDate(restaurant.id);
-    console.log(hours);
-    history.push('/reservation', {hours, restaurant});
+    console.log('restaurant: ', restaurant)
+    const hours = await apiGatewayService.getDate(restaurant._id);
+    console.log('search_res: ', searchResult);
+    history.push('/reservation', {hours, restaurant, search: searchResult});
   }
   
   return <div>
