@@ -15,6 +15,14 @@ interface ReservationPageProps {
   restaurantName: string;
   restaurant: any;
 }
+const isAvailable = (date: any, hour: any, guests: any) => {
+  console.log('hour:  ',  hour)
+  console.log('date: ', date[hour])
+  
+  const array = date[hour].filter(element => element.size === parseInt(guests));
+  console.log(array)
+  return date && (array.length === 0);}
+  // date && !date[hour].filter(element => element.size === guests);
 
 export const ReservationPage = ({apiGatewayService, restaurant, setAppContent, hours, initialNumberOfGuests, restaurantName}: ReservationPageProps) => {
   const [date, setDate] = useState(new Date());
@@ -81,7 +89,7 @@ export const ReservationPage = ({apiGatewayService, restaurant, setAppContent, h
             element ?
             <li key={element} className={`one-hour__list-element ${hour}`}>
               <button 
-                disabled={hours[formatDate(date)] ? hours[formatDate(date)][element] : false} 
+                disabled={isAvailable(hours[formatDate(date)], element, guestNumber)} 
                 className={`basic-button one-hour__button ${element === hour && 'choosen'}`}
                 onClick={() => setHour(element.toString())}
               >
