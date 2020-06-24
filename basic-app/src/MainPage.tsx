@@ -102,7 +102,7 @@ const Filters = ({setFinalPriceFilters, setFinalCuisineFilters}: {setFinalCuisin
     }
   }
 
-  const cuisines = ['amerykańska', 'włoska'];
+  const cuisines = ['amerykańska', 'włoska', 'polska', 'ukraińska'];
 
   return <div className='filters-wrapper'>
    <Prices filters={priceFilters} changeFilter={changePriceFilter}/>

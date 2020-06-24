@@ -21,7 +21,7 @@ export const Reserved = ({reservation: {restaurantName, date, time, guestNumber,
       <div className='reserved-subtitle'>
         Rezerwacja 
         <ReservationSummariseDetails reservation={{time, date, guestNumber}}/> 
-        w {restaurantName.toUpperCase()}. Udanej wizyty!
+        w {restaurantName.toUpperCase()} została dodana pomyślnie. Udanej wizyty!
       </div>
     </div>
   </div>
