@@ -49,7 +49,7 @@ const hours = {
 
 
 const App = () => {
-  const [apiGatewayService] = useState(new ApiGatewayService('https://127.0.0.1:5000'));
+  const [apiGatewayService] = useState(new ApiGatewayService('http://127.0.0.1:5004'));
   const history = useHistory();
   const [isLogged, setIsLogged] = useState(false);
   
