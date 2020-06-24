@@ -81,7 +81,7 @@ export class ApiGatewayService {
   }
 
   reserve(reservation: Reservation) {
-    return this.http('POST', '/reservation', reservation);
+    // return this.http('POST', '/reservation', reservation);
   }
 
   searchRestaurants(search: Search) {
