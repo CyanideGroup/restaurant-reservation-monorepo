@@ -17,6 +17,13 @@ interface ReservationPageProps {
 }
 // date && !date[hour].filter(element => element.size === guests);
 
+const isAvailable = (date: any, hour: any, guests: any) => {
+  console.log('hour:  ',  hour)
+  console.log('date: ', date[hour])
+  const array = date[hour].filter(element => element.size === parseInt(guests));
+  return date && (array.length === 0);
+}
+
 export const ReservationPage = ({apiGatewayService, restaurant, setAppContent, hours, initialNumberOfGuests, restaurantName}: ReservationPageProps) => {
   const [date, setDate] = useState(new Date());
   const [hour, setHour] = useState('');
@@ -25,14 +32,7 @@ export const ReservationPage = ({apiGatewayService, restaurant, setAppContent, h
   const guestArr = getGuestsArray(9);
   console.log(restaurant);
 
-  const isAvailable = (date: any, hour: any, guests: any) => {
-    console.log('hour:  ',  hour)
-    console.log('date: ', date[hour])
-    const array = date[hour].filter(element => element.size === parseInt(guests));
-    setTables(array);
-    console.log(array)
-    return date && (array.length === 0);
-  }
+ 
 
   return (
     <div className="bigBox">
@@ -96,7 +96,10 @@ export const ReservationPage = ({apiGatewayService, restaurant, setAppContent, h
               <button 
                 disabled={isAvailable(hours[formatDate(date)], element, guestNumber)} 
                 className={`basic-button one-hour__button ${element === hour && 'choosen'}`}
-                onClick={() => setHour(element.toString())}
+                onClick={() => {
+                  setHour(element.toString());
+                  setTables((hours[formatDate(date)][hour] as any).filter(element => element.size === parseInt(guestNumber)));
+                }}
               >
                 {element}
               </button>
