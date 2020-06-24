@@ -12,41 +12,48 @@ export const MainPage = ({setIsLogged, apiGatewayService}: {apiGatewayService: a
   const history = useHistory();
   const [priceFilters, setPriceFilters] = useState([]);
   const [cuisineFilters, setCuisineFilters] = useState([]);
-  const result = {
-    0: {
-      _id: 0,
-      closes: '23:00:00',
-      address: 'kfc street',
-      country: null,
-      cuisine: 'amerykańska',
-      name: 'kfc',
-      opens: '07:00:00',
-      rated: null,
-      description: lelumPolelum,
-      pricing: '$',
-      url: 'https://www.scandichotels.com/imagevault/publishedmedia/qn6infvg30381stkubky/scandic-sundsvall-city-restaurant-verket-10.jpg',
-    },
-    1: {
-      _id: 1,
-      closes: '23:00:00',
-      address: 'burgerking street',
-      country: null,
-      cuisine: 'amerykańska',
-      name: 'burgerking',
-      opens: '07:00:00',
-      rated: null,
-      description: lelumPolelum,
-      pricing: '$$',
-      url: 'https://www.scandichotels.com/imagevault/publishedmedia/qn6infvg30381stkubky/scandic-sundsvall-city-restaurant-verket-10.jpg',
-    }
-  }
+  // const result = {
+  //   0: {
+  //     _id: 0,
+  //     closes: '23:00:00',
+  //     address: 'kfc street',
+  //     country: null,
+  //     cuisine: 'amerykańska',
+  //     name: 'kfc',
+  //     opens: '07:00:00',
+  //     rated: null,
+  //     description: lelumPolelum,
+  //     pricing: '$',
+  //     url: 'https://www.scandichotels.com/imagevault/publishedmedia/qn6infvg30381stkubky/scandic-sundsvall-city-restaurant-verket-10.jpg',
+  //   },
+  //   1: {
+  //     _id: 1,
+  //     closes: '23:00:00',
+  //     address: 'burgerking street',
+  //     country: null,
+  //     cuisine: 'amerykańska',
+  //     name: 'burgerking',
+  //     opens: '07:00:00',
+  //     rated: null,
+  //     description: lelumPolelum,
+  //     pricing: '$$',
+  //     url: 'https://www.scandichotels.com/imagevault/publishedmedia/qn6infvg30381stkubky/scandic-sundsvall-city-restaurant-verket-10.jpg',
+  //   }
+  // }
+  
   const [restaurants, setRestaurants] = useState<any>();
   const onSearch = async (search: Search) => {
     console.log(search);
-    // const result = await apiGatewayService.searchRestaurants(search);
+    const result = await apiGatewayService.searchRestaurants(search);
     setRestaurants(result);
   };
-
+  const onReserveClick = async(restaurant: any) =>
+  {
+    const dates = await apiGatewayService.getDate(restaurant._id);
+    console.log(restaurant._id)
+    console.log("dates: ", dates)
+    history.push('/reservation', {restaurant: dates});
+  }
   return <div>
     <SearchBar onSearch={onSearch}/>
     <div className='content'>
@@ -55,7 +62,7 @@ export const MainPage = ({setIsLogged, apiGatewayService}: {apiGatewayService: a
           <div>
             <Filters setFinalPriceFilters={setPriceFilters} setFinalCuisineFilters={setCuisineFilters}/>
             <Restaurants 
-              onReserve={(args?: any[]) => history.push('/reservation', {restaurant: args})}
+              onReserve={(args?: any[]) => onReserveClick(args)}
               restaurants={restaurants}
               cuisineFilters={cuisineFilters}
               priceFilters={priceFilters}

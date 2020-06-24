@@ -51,7 +51,7 @@ export const SearchBar = ({onSearch}: SearchBarProps) => {
         <SearchInput setSearchValue={setSearchValue}/>
       </div>
       <div className='search-bar-element'>
-        <button className='basic-button coloured-button search-bar-button' onClick={() => onSearch({date, time: hour, guests: guestNumber as any, address: searchValue})}>
+        <button className='basic-button coloured-button search-bar-button' onClick={() => onSearch({date, time: hour, guests: guestNumber as any, name: searchValue})}>
           Wyszukaj
         </button>
       </div>
@@ -65,7 +65,7 @@ interface SearchInputProps {
 
 const SearchInput = ({setSearchValue}: SearchInputProps) => {
   return <div>
-    <input className='basic-input search-input' placeholder='np. Warszawa' onChange={(event) => setSearchValue(event.target.value)}/>
+    <input className='basic-input search-input' placeholder='np. KFC' onChange={(event) => setSearchValue(event.target.value)}/>
     </div>
 }
 

@@ -1,6 +1,8 @@
 export const COMMON_HEADERS = {
   Accept: 'application/json',
-  'Content-Type': 'application/json',
+  //'Content-Type': 'application/json',
+  'Content-Type': 'application/json; charset=utf-8'
+
 };
 
 const fetch = window.fetch ? window.fetch.bind(window) : () => {};
@@ -73,6 +75,10 @@ export class ApiGatewayService {
     this.http = http(apiGatewayUrl);
   }
 
+  getDate(restaurant_id: any) {
+    return this.http('GET', `/reservation?restaurant_id=${restaurant_id}`);
+  }
+
   reserve(reservation: Reservation) {
     return this.http('POST', '/reservation', reservation);
   }
@@ -83,35 +89,36 @@ export class ApiGatewayService {
   }
 
   async getRestaurant(id: string) {
-    const restaurants = {
-      0: {
-        _id: 0,
-        closes: '23:00:00',
-        address: 'kfc street',
-        country: null,
-        cuisine: 'amerykańska',
-        name: 'kfc',
-        opens: '07:00:00',
-        rated: null,
-        description: lelumPolelum,
-        pricing: '$',
-        url: 'https://www.scandichotels.com/imagevault/publishedmedia/qn6infvg30381stkubky/scandic-sundsvall-city-restaurant-verket-10.jpg',
-      },
-      1: {
-        _id: 1,
-        closes: '23:00:00',
-        address: 'burgerking street',
-        country: null,
-        cuisine: 'amerykańska',
-        name: 'burgerking',
-        opens: '07:00:00',
-        rated: null,
-        description: lelumPolelum,
-        pricing: '$$',
-        url: 'https://www.scandichotels.com/imagevault/publishedmedia/qn6infvg30381stkubky/scandic-sundsvall-city-restaurant-verket-10.jpg',
-      }
-    };
-    return restaurants[id];
-    // return this.http('GET', `/restaurant/${id}`);
+    // const restaurants = {
+      // 0: {
+      //   _id: 0,
+      //   closes: '23:00:00',
+      //   address: 'kfc street',
+      //   country: null,
+      //   cuisine: 'amerykańska',
+      //   name: 'kfc',
+      //   opens: '07:00:00',
+      //   rated: null,
+      //   description: lelumPolelum,
+      //   pricing: '$',
+      //   url: 'https://www.scandichotels.com/imagevault/publishedmedia/qn6infvg30381stkubky/scandic-sundsvall-city-restaurant-verket-10.jpg',
+      // },
+    //   1: {
+    //     _id: 1,
+    //     closes: '23:00:00',
+    //     address: 'burgerking street',
+    //     country: null,
+    //     cuisine: 'amerykańska',
+    //     name: 'burgerking',
+    //     opens: '07:00:00',
+    //     rated: null,
+    //     description: lelumPolelum,
+    //     pricing: '$$',
+    //     url: 'https://www.scandichotels.com/imagevault/publishedmedia/qn6infvg30381stkubky/scandic-sundsvall-city-restaurant-verket-10.jpg',
+    //   }
+    // };
+    // return restaurants[id];
+    
+    return this.http('GET', `/restaurant/${id}`);
   }
 };
