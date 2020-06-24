@@ -67,7 +67,7 @@ const parseSearch = ({date, time, guests, name, address}: Search) => {
   return query;
 }
 
-const lelumPolelum = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
+const lelumPolelum = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur.'
 
 export class ApiGatewayService {
   private http: HttpFunction;
@@ -122,7 +122,45 @@ const restaurants = {
     description: lelumPolelum,
     pricing: '$$',
     url: 'https://www.scandichotels.com/imagevault/publishedmedia/qn6infvg30381stkubky/scandic-sundsvall-city-restaurant-verket-10.jpg',
+  },
+  2: {
+    description: 'Pierogi, kasza, kluski, gołąbki, kotlet schabowy, kotlet mielony, bigos, galareta mięsna, golonka, żurek, kapuśniak… Wszystko w przystępnych cenach!',
+    closes: '23:00:00',
+    address: 'Francuska 11',
+    country: null,
+    cuisine: 'polska',
+    name: 'Dom Polski',
+    opens: '08:30:00',
+    rated: null,
+    pricing: '$$$',
+    url: 'https://images.pexels.com/photos/941861/pexels-photo-941861.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
+  },
+  3: {
+    description: 'Prawdziwy barszcz ukraiński z kwaśną śmietaną i pączkami czosnku, placki ziemniaczane, ziemniaki, pierogi lub naleśniki. Wybierz, co chcesz.',
+    closes: '23:00:00',
+    address: 'Jurija Gagarina 26',
+    country: null,
+    cuisine: 'ukraińska',
+    name: 'Prydana',
+    opens: '08:30:00',
+    rated: null,
+    pricing: '$',
+    url: 'https://images.pexels.com/photos/2067576/pexels-photo-2067576.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
+  },
+  4: {
+    description: 'Restauracja tradycyjnej kuchni włoskiej ze starożytną historią. Otwarta w 1888 roku.',
+    closes: '23:00:00',
+    address: 'Jurija Gagarina 26',
+    country: null,
+    cuisine: 'włoska',
+    name: 'La Kimontaretto',
+    opens: '08:30:00',
+    rated: null,
+    pricing: '$$$',
+    url: 'https://images.pexels.com/photos/1581384/pexels-photo-1581384.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940',
   }
+
+
 };
 
 const hours = {
@@ -150,8 +188,14 @@ const hours = {
     ['22:30']: true,
     ['23:00']: false,
   },
-  ['2020-06-23']: {
-    ['18:00']: true,
+  ['2020-06-24']: {
+    ['11:00']: true,
+    ['11:30']: false,
+    ['14:30']: false,
+    ['15:00']: false,
+    ['15:30']: false,
+    ['16:00']: false,
+    ['18:00']: false,
     ['18:30']: true,
     ['19:00']: true,
     ['19:30']: false,

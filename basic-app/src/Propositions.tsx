@@ -13,8 +13,8 @@ export const Propositions = ({apiGatewayService, onReserve}: PropositionsProps) 
     <div className='propositions-title'>
       Polecamy
     </div>
-  <Proposition id='1' apiGatewayService={apiGatewayService} onReserve={onReserve}/>
-  <Proposition id='0' apiGatewayService={apiGatewayService} onReserve={onReserve}/>
+  <Proposition id='3' apiGatewayService={apiGatewayService} onReserve={onReserve}/>
+  <Proposition id='4' apiGatewayService={apiGatewayService} onReserve={onReserve}/>
   </div>
 };
 interface PropositionProps extends PropositionsProps {

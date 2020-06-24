@@ -17,12 +17,16 @@ interface ReservationSummariseProps {
   apiGatewayService: ApiGatewayService;
 }
 
-const agreement = 'Zgadzam się na...';
+const agreement = '*Wyrażam zgodę na przetwarzanie moich danych osobowych przez Cyanide sp. z o. o. w celu zawarcia umowy o świadczenie usług udostępniania i korzystania z aplikacji Rezerwuj.';
+const agreement2 = '*Zapoznałem się z pouczeniem o prawie odstąpnienia od Umowy.';
+const agreement3 = '*Wyrażam zgodę na przetwarzanie moich danych osobowych przez wybrane przeze mnie restauracje i inne lokale gastronomiczne w celu dokonania w nich rezerwacji.';
 
 export const ReservationSummarise = ({reservation, apiGatewayService}: ReservationSummariseProps) => {
   const history = useHistory();
   const [email, setEmail] = useState('');
   const [agreed, setAgreed] = useState(false);
+  const [agreed2, setAgreed2] = useState(false);
+  const [agreed3, setAgreed3] = useState(false);
 
   return <div className='reservation-summarise'>
     <div className='reservation-summarise-restaurant-name'>
@@ -35,11 +39,12 @@ export const ReservationSummarise = ({reservation, apiGatewayService}: Reservati
     </div>
   </div>
   <InputChecked name={agreement} changeFilter={() => setAgreed(!agreed)}/>
-  {/* <InputChecked name={agreement} changeFilter={() => setAgreed(!agreed)}/> */}
-
+  <InputChecked name={agreement2} changeFilter={() => setAgreed2(!agreed2)}/>
+  <InputChecked name={agreement3} changeFilter={() => setAgreed3(!agreed3)}/>
+  <div className='reservation-agreements'>* - pola obowiązkowe</div>
   <div className='reservation-summarise-button-wrapper'>
     <button 
-      disabled={!agreed || !email} 
+      disabled={!agreed || !email || !agreed2 || !agreed3} 
       className='basic-button coloured-button reservation-summarise-button' 
       onClick={async () => {
         await apiGatewayService.reserve({...reservation, restaurantId: '1', email});

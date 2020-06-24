@@ -58,7 +58,7 @@ const App = () => {
       <Route path='/reservation' exact component={({location}) => <ReservationPage
           setAppContent={(reservation: any) => history.push('/confirmation', {reservation})}
           apiGatewayService={apiGatewayService}
-          hours={hours}
+          hours={location.state.hours}
           restaurant={location.state.restaurant}
           initialNumberOfGuests={'2'}
           restaurantName={'Restauracja'}/>}/>
