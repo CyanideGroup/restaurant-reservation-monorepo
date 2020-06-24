@@ -77,23 +77,29 @@ export class ApiGatewayService {
 
   getDate(restaurant_id: any) {
     return hours;    
-    // return this.http('GET', `/reservation?restaurant_id=${restaurant_id}`);
+    console.log('restaurant_id:', restaurant_id)
+    return this.http('GET', `/reservation?restaurant_id=${restaurant_id}`);
   }
 
   reserve(reservation: Reservation) {
     // return this.http('POST', '/reservation', reservation);
   }
 
-  searchRestaurants(search: Search) {
+  async searchRestaurants(search: Search) {
     const searchQuery = parseSearch(search);
-    return restaurants
-    // return this.http('GET', `/search?${searchQuery}`);
+    // return restaurants
+    const restaurants = await this.http('GET', `/search?${searchQuery}`);
+    const keys = Object.keys(restaurants);
+    keys.forEach(key => (restaurants[key] = {...restaurants[key], pricing: getPricing(restaurants[key].price), url: restaurants[key].img1}))
+    console.log(restaurants);
+    return restaurants;
   }
 
   async getRestaurant(id: string) {
-  return restaurants[id];
-    // return this.http('GET', `/restaurant/${id}`);
-  }
+    // return restaurants[id];
+      const restaurant = await this.http('GET', `/restaurant/${id}`);
+      return {...restaurant, url: restaurant.img1, pricing: getPricing(restaurant.price)}
+    }
 };
 
 const restaurants = {
@@ -205,4 +211,11 @@ const hours = {
     ['22:00']: true,
     ['22:30']: false,
   }
+}
+const getPricing = (price: number) => {
+  let pricing = '';
+  for(let i = 0; i < price; i++) {
+    pricing +='$';
+  }
+  return pricing;
 }
