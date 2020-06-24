@@ -47,13 +47,13 @@ export const MainPage = ({setIsLogged, apiGatewayService}: {apiGatewayService: a
     const result = await apiGatewayService.searchRestaurants(search);
     setRestaurants(result);
   };
-  const onReserveClick = async(restaurant: any) =>
-  {
-    const dates = await apiGatewayService.getDate(restaurant._id);
-    console.log(restaurant._id)
-    console.log("dates: ", dates)
-    history.push('/reservation', {restaurant: dates});
+
+  const onReserveClick = async(restaurant: any) => {
+    const hours = await apiGatewayService.getDate(restaurant.id);
+
+    history.push('/reservation', {hours, restaurant});
   }
+  
   return <div>
     <SearchBar onSearch={onSearch}/>
     <div className='content'>
