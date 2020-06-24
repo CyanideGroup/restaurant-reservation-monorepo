@@ -8,7 +8,7 @@ import { Search } from './services/ApiGatewayService';
 
 const getPossibleHours = () => {
   var arr = [], i, j;
-  for(i=0; i<24; i++) {
+  for(i=9; i<23; i++) {
     for(j=0; j<4; j++) {
       const hour = i + ":" + (j===0 ? "00" : 15*j);
       arr.push({value: hour, label: hour} );

@@ -65,6 +65,8 @@ const parseSearch = ({date, time, guests, name, address}: Search) => {
   return query;
 }
 
+const lelumPolelum = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
+
 export class ApiGatewayService {
   private http: HttpFunction;
   constructor(apiGatewayUrl: string){
@@ -75,8 +77,41 @@ export class ApiGatewayService {
     return this.http('POST', '/reservation', reservation);
   }
 
-  getRestaurants(search: Search) {
+  searchRestaurants(search: Search) {
     const searchQuery = parseSearch(search);
     return this.http('GET', `/search?${searchQuery}`);
+  }
+
+  async getRestaurant(id: string) {
+    const restaurants = {
+      0: {
+        _id: 0,
+        closes: '23:00:00',
+        address: 'kfc street',
+        country: null,
+        cuisine: 'amerykańska',
+        name: 'kfc',
+        opens: '07:00:00',
+        rated: null,
+        description: lelumPolelum,
+        pricing: '$',
+        url: 'https://www.scandichotels.com/imagevault/publishedmedia/qn6infvg30381stkubky/scandic-sundsvall-city-restaurant-verket-10.jpg',
+      },
+      1: {
+        _id: 1,
+        closes: '23:00:00',
+        address: 'burgerking street',
+        country: null,
+        cuisine: 'amerykańska',
+        name: 'burgerking',
+        opens: '07:00:00',
+        rated: null,
+        description: lelumPolelum,
+        pricing: '$$',
+        url: 'https://www.scandichotels.com/imagevault/publishedmedia/qn6infvg30381stkubky/scandic-sundsvall-city-restaurant-verket-10.jpg',
+      }
+    };
+    return restaurants[id];
+    // return this.http('GET', `/restaurant/${id}`);
   }
 };

@@ -13,23 +13,24 @@ interface ReservationPageProps {
   hours: Record<string, Record<string, boolean>>;
   initialNumberOfGuests: string;
   restaurantName: string;
+  restaurant: any;
 }
 
-export const ReservationPage = ({apiGatewayService, setAppContent, hours, initialNumberOfGuests, restaurantName}: ReservationPageProps) => {
+export const ReservationPage = ({apiGatewayService, restaurant, setAppContent, hours, initialNumberOfGuests, restaurantName}: ReservationPageProps) => {
   const [date, setDate] = useState(new Date());
   const [hour, setHour] = useState('');
   const [guestNumber, setGuestNumber] = useState(initialNumberOfGuests);
   const guestArr = getGuestsArray(9);
-
+  console.log(restaurant);
   return (
   <div className="bigBox">
     <div className="restaurant-img-wrapper">
-      <img className="restaurant-img" src='https://www.scandichotels.com/imagevault/publishedmedia/qn6infvg30381stkubky/scandic-sundsvall-city-restaurant-verket-10.jpg'/>
+      <img className="restaurant-img" src={restaurant.url}/>
     </div>
     <div className="box">
       <div  className="right-box">
         <div className="restaurant-name">
-          {restaurantName}
+          {restaurant.name.toUpperCase()}
         </div>
         <div className="calendar calendar-reservation">
             <Calendar value={date} onChange={setDate} />
@@ -50,7 +51,7 @@ export const ReservationPage = ({apiGatewayService, setAppContent, hours, initia
             className="reservation__button basic-button coloured-button"
             disabled={!hour}
             onClick={async () => {
-              console.log('reserve'
+              console.log('confirmation'
                 // await apiGatewayService.reserve({
                 //   date,
                 //   time: hour,
@@ -60,9 +61,9 @@ export const ReservationPage = ({apiGatewayService, setAppContent, hours, initia
               setAppContent({
                 date,
                 time: hour,
-                restaurantId: "1",
+                restaurantId: restaurant.id,
                 guestNumber,
-                restaurantName,
+                restaurantName: restaurant.name,
               });
             }
             }
